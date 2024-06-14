@@ -17,9 +17,9 @@ Key Features:
 - Example of CRUD operations.
 - Suitable for beginners and those who need a quick setup for REST services.
 
-### graphql
+### my-user-redex-graphql-api
 
-The `graphql` branch contains the implementation of a GraphQL service. This branch is aimed at those who are interested in using GraphQL for their APIs. 
+The `my-user-redex-graphql-api` branch contains the implementation of a GraphQL service. This branch is aimed at those who are interested in using GraphQL for their APIs. 
 
 Key Features:
 - Implementation of GraphQL queries and mutations.
