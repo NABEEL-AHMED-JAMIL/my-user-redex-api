@@ -3,7 +3,7 @@
 ## Overview
 
 This repository contains two main branches:
-- **main**: Implements a simple REST service.
+- **main & my-user-redex-api**: Implements a simple REST service.
 - **graphql**: Implements a GraphQL service.
 
 ## Branches
