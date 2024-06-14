@@ -8,7 +8,7 @@ This repository contains two main branches:
 
 ## Branches
 
-### main & my-user-redex-api
+### 1) main & my-user-redex-api
 
 The `main & my-user-redex-api` branch contains the implementation of a simple REST service. This branch is suitable for those who are looking for a straightforward example of a RESTful API. 
 
@@ -17,7 +17,7 @@ Key Features:
 - Example of CRUD operations.
 - Suitable for beginners and those who need a quick setup for REST services.
 
-### my-user-redex-graphql-api
+### 2) my-user-redex-graphql-api
 
 The `my-user-redex-graphql-api` branch contains the implementation of a GraphQL service. This branch is aimed at those who are interested in using GraphQL for their APIs. 
 
