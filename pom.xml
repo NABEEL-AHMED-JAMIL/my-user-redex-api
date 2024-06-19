@@ -13,7 +13,7 @@
 	<groupId>com.user</groupId>
 	<artifactId>redex</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>redex</name>
+	<name>my-user-redux-api</name>
 	<description>Demo Application For Redux Rest Service</description>
 
 	<properties>
