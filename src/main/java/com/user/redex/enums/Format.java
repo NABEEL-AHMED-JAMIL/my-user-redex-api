@@ -2,6 +2,9 @@ package com.user.redex.enums;
 
 import com.google.gson.Gson;
 
+/**
+ * @author Nabeel Ahmed
+ */
 public enum Format {
 
     HARD_COVER("017-954", "Hard Cover"),

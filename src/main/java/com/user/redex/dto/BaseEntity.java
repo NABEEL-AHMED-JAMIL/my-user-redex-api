@@ -1,8 +1,7 @@
-package com.user.redex.model;
+package com.user.redex.dto;
 
 import com.google.gson.Gson;
 import com.user.redex.enums.Status;
-import org.springframework.data.annotation.Id;
 import java.time.LocalDateTime;
 
 /**
@@ -10,7 +9,6 @@ import java.time.LocalDateTime;
  */
 public class BaseEntity {
 
-    @Id
     private String id;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

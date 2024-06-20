@@ -2,6 +2,9 @@ package com.user.redex.enums;
 
 import com.google.gson.Gson;
 
+/**
+ * @author Nabeel Ahmed
+ */
 public enum Category {
 
     FICTION("014-97-98", "Fiction"),

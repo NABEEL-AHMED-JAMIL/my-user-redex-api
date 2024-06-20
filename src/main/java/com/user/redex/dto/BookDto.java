@@ -1,41 +1,31 @@
-package com.user.redex.model;
+package com.user.redex.dto;
 
 import com.google.gson.Gson;
+import com.user.redex.enums.Category;
 import com.user.redex.enums.Format;
 import com.user.redex.enums.Language;
-import com.user.redex.enums.Category;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDate;
 
 /**
  * @author Nabeel Ahmed
  */
-@Document(collection = "books")
-public class Book extends BaseEntity {
+public class BookDto extends BaseEntity {
 
-    @Indexed(unique = true)
     private String isbn;
     private String title;
     private Double price;
     private String publisher;
-    @Indexed
     private LocalDate publication;
-    @Indexed
     private Language language;
-    @Indexed
     private Category Category;
-    @Indexed
     private Format format;
     private String description;
     private String coverImg;
     private String bookUrl;
     private String note;
-    @DBRef
-    private Author author;
+    private AuthorDto author;
 
-    public Book() {
+    public BookDto() {
     }
 
     public String getIsbn() {
@@ -134,11 +124,11 @@ public class Book extends BaseEntity {
         this.note = note;
     }
 
-    public Author getAuthor() {
+    public AuthorDto getAuthor() {
         return author;
     }
 
-    public void setAuthor(Author author) {
+    public void setAuthor(AuthorDto author) {
         this.author = author;
     }
 

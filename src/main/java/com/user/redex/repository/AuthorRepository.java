@@ -1,7 +1,11 @@
 package com.user.redex.repository;
 
 import com.user.redex.model.Author;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
 
-public interface AuthorRepository extends MongoRepository<Author, String> {
+/**
+ * @author Nabeel Ahmed
+ */
+@Repository
+public interface AuthorRepository extends EntityRepository<Author> {
 }

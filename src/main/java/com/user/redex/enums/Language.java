@@ -2,6 +2,9 @@ package com.user.redex.enums;
 
 import com.google.gson.Gson;
 
+/**
+ * @author Nabeel Ahmed
+ */
 public enum Language {
 
     ENGLISH("0148", "English"),

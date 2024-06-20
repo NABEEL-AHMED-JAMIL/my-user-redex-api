@@ -37,15 +37,15 @@ This project includes JWT-based authentication and authorization for secure acce
 - **Edit Profile**: Authors can update their profile information.
 
 ### Book Management
-- **Add/Edit Book**: Authors can add new books or edit existing ones.
-- **List Books**: Authors can view a list of their books.
-- **Public Book**: Authors can mark their books as public.
+- **Add/Edit Book**: Authors can add new bookDtos or edit existing ones.
+- **List Books**: Authors can view a list of their bookDtos.
+- **Public Book**: Authors can mark their bookDtos as public.
 
 ### Public Access
-- **View Public Book Detail**: Users can view details of public books.
+- **View Public Book Detail**: Users can view details of public bookDtos.
 
 ### Shopping Cart
-- **Add to Cart**: Users can add books to their shopping cart.
+- **Add to Cart**: Users can add bookDtos to their shopping cart.
 - **Show Cart and Payment Detail**: Users can view their cart and payment details.
 
 ## Technology Stack

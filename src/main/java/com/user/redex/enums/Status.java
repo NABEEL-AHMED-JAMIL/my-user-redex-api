@@ -2,6 +2,9 @@ package com.user.redex.enums;
 
 import com.google.gson.Gson;
 
+/**
+ * @author Nabeel Ahmed
+ */
 public enum Status {
 
     INACTIVE(0, "Inactive"),

@@ -1,27 +1,23 @@
-package com.user.redex.model;
+package com.user.redex.dto;
 
 import com.google.gson.Gson;
 import java.util.List;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * @author Nabeel Ahmed
  */
-@Document(collection = "author")
-public class Author extends BaseEntity {
+public class AuthorDto extends BaseEntity {
 
     private String firstName;
     private String lastName;
-    private String email;
     private String username;
     private String password;
     private String biography;
-    @Indexed
     private String nationality;
     private String expertise;
     private String image;
-    private List<Book> books;
+    private String email;
+    private List<BookDto> books;
 
     public String getFirstName() {
         return firstName;
@@ -37,14 +33,6 @@ public class Author extends BaseEntity {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getUsername() {
@@ -95,11 +83,19 @@ public class Author extends BaseEntity {
         this.image = image;
     }
 
-    public List<Book> getBooks() {
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public List<BookDto> getBooks() {
         return books;
     }
 
-    public void setBooks(List<Book> books) {
+    public void setBooks(List<BookDto> books) {
         this.books = books;
     }
 
