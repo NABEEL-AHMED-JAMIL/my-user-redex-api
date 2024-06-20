@@ -16,9 +16,9 @@ public class BookDto extends BaseEntity {
     private Double price;
     private String publisher;
     private LocalDate publication;
-    private Language language;
-    private Category Category;
-    private Format format;
+    private GEnum<Language> language;
+    private GEnum<Category> Category;
+    private GEnum<Format> format;
     private String description;
     private String coverImg;
     private String bookUrl;
@@ -68,27 +68,27 @@ public class BookDto extends BaseEntity {
         this.publication = publication;
     }
 
-    public Language getLanguage() {
+    public GEnum<Language> getLanguage() {
         return language;
     }
 
-    public void setLanguage(Language language) {
+    public void setLanguage(GEnum<Language> language) {
         this.language = language;
     }
 
-    public com.user.redex.enums.Category getCategory() {
+    public GEnum<Category> getCategory() {
         return Category;
     }
 
-    public void setCategory(com.user.redex.enums.Category category) {
+    public void setCategory(GEnum<Category> category) {
         Category = category;
     }
 
-    public Format getFormat() {
+    public GEnum<Format> getFormat() {
         return format;
     }
 
-    public void setFormat(Format format) {
+    public void setFormat(GEnum<Format> format) {
         this.format = format;
     }
 

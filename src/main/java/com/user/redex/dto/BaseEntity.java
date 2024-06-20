@@ -12,7 +12,7 @@ public class BaseEntity {
     private String id;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private Status status;
+    private GEnum<Status> status;
 
     public BaseEntity() {
     }
@@ -41,11 +41,11 @@ public class BaseEntity {
         this.updatedAt = updatedAt;
     }
 
-    public Status getStatus() {
+    public GEnum<Status> getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(GEnum<Status> status) {
         this.status = status;
     }
 

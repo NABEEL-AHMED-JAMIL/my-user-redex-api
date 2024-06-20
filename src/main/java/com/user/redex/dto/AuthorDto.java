@@ -10,13 +10,13 @@ public class AuthorDto extends BaseEntity {
 
     private String firstName;
     private String lastName;
+    private String email;
     private String username;
     private String password;
     private String biography;
     private String nationality;
     private String expertise;
     private String image;
-    private String email;
     private List<BookDto> books;
 
     public String getFirstName() {

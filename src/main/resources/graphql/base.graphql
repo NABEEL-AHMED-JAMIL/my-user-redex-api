@@ -1,0 +1,71 @@
+# Doc Ref
+# https://graphql.org/learn/schema/#object-types-and-fields
+
+scalar LocalDate
+scalar LocalDateTime
+
+# [!] means that the field is non-nullable, meaning that the GraphQL service promises to always give you a value
+# when you query this field. In the type language, we’ll represent those with an exclamation mark.
+interface BaseEntity {
+    id: ID!
+    createdAt: LocalDateTime!
+    updatedAt: LocalDateTime!
+    status: GStatus!
+}
+
+# for input we will send the enum as it
+enum Format {
+    HARD_COVER,
+    PAPER_BACK,
+    EBOOK
+}
+
+# for output we will fetch the custom enum
+type GFormat {
+    code: Int!
+    name: String!
+    value: Format!
+}
+
+# for input we will send the enum as it
+enum Language {
+    ENGLISH,
+    SPANISH,
+    ARABIC
+}
+
+# for output we will fetch the custom enum
+type GLanguage {
+    code: Int!
+    name: String!
+    value: Language!
+}
+
+# for input we will send the enum as it
+enum Category {
+    FICTION,
+    NO_FICTION,
+    MYSTERY,
+    SCIENCE_FICTION
+}
+
+# for output we will fetch the custom enum
+type GCategory {
+    code: Int!
+    name: String!
+    value: Category!
+}
+
+# for input we will send the enum as it
+enum Status {
+    INACTIVE,
+    ACTIVE,
+    DELETE
+}
+
+# for output we will fetch the custom enum
+type GStatus {
+    code: Int!
+    name: String!
+    value: Status!
+}
