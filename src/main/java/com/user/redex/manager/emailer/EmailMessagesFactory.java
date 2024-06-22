@@ -38,6 +38,7 @@ public class EmailMessagesFactory {
                 // * * * * * * * * *Send cc's* * * * * * * * *
                 if (emailContent.getRecipientsMulti() != null && emailContent.getRecipientsMulti().size() > 0) {
                     String ccSendTo = emailContent.getRecipientsMulti().toString();
+                    // removing the [] from the array
                     ccSendTo = ccSendTo.substring(1, ccSendTo.length()-1);
                     helper.setCc(ccSendTo);
                 }

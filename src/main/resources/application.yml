@@ -1,0 +1,56 @@
+#==============================
+# ==== Server detail ==========
+# =============================
+server:
+  port: 9098
+#==============================
+# ==== Database detail ========
+# =============================
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: etl-data
+#==============================
+# ==== Graphql detail =========
+# =============================
+  graphql:
+    graphiql:
+      enabled: true
+      path: /graphiql
+#==============================
+# ==== Email detail ===========
+# =============================
+  mail:
+    host: ${MAIL_HOST}
+    port: 465
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    smtp:
+      auth: true
+      starttls:
+        enable: false
+      debug: true
+      properties:
+        mail:
+          smtp:
+            socketFactory:
+              port: 465
+              class: javax.net.ssl.SSLSocketFactory
+#==============================
+# ==== JWT Token detail =======
+# =============================
+app:
+  jwtSecret: ${JWT_SECRET}
+  jwtExpirationMs: 86400000
+  jwtRefreshExpirationMs: 8640000
+#===============================
+# ==== AWS Detail ==============
+# ==============================
+bucket:
+  id: 303ffea7cf7e46bf86290a4221ecee2d
+  access_key: ${BUCKET_ACCESS_KEY}
+  secret_key: ${BUCKET_SECRET_KEY}
+  storage_url: https://eu2.contabostorage.com
+  secret_region: us-east-1

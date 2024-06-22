@@ -10,10 +10,10 @@ import com.amazonaws.services.s3.model.*;
 import com.google.gson.Gson;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,16 +33,16 @@ public class RemoteFileExchange {
     @Value("${bucket.id}")
     private String bucketId;
 
-    @Value("${bucket.access.key}")
+    @Value("${bucket.access_key}")
     private String accessKey;
 
-    @Value("${bucket.secret.key}")
+    @Value("${bucket.secret_key}")
     private String secretKey;
 
-    @Value("${bucket.secret.region}")
+    @Value("${bucket.secret_region}")
     private String region;
 
-    @Value("${bucket.storage.url}")
+    @Value("${bucket.storage_url}")
     private String storageUrl;
 
     private AmazonS3 amazonS3;
@@ -93,7 +93,7 @@ public class RemoteFileExchange {
      * @throws AmazonClientException
      * */
     public Map<String, Object> uploadToBucket(String bucketName, String objKey,
-        InputStream inputStream, Boolean isPublicAccess) throws AmazonClientException {
+        InputStream inputStream, Boolean isPublicAccess) throws AmazonClientException, IOException {
         logger.debug("Uploading a new object to S3 from a file => " + objKey);
         Map<String, Object> resultObject = new HashMap<>();
         PutObjectRequest putObjectRequest = new PutObjectRequest(getBucketName(bucketName), objKey,
@@ -103,7 +103,7 @@ public class RemoteFileExchange {
         }
         PutObjectResult putObjectResult = this.amazonS3.putObject(putObjectRequest);
         if (inputStream != null) {
-            IOUtils.closeQuietly(inputStream);
+            inputStream.close();
         }
         resultObject.put(FILE_PATH, objKey);
         // only show the url in log if its allow public read access

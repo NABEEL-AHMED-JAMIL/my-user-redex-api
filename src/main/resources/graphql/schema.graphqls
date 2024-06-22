@@ -1,0 +1,175 @@
+# Doc & Github Ref
+# https://graphql.org/learn/schema/#object-types-and-fields [use for create the graphql]
+# https://github.com/Amit-Chavda/todo-app-grapql [use for graphql custom scalar in java]
+# https://github.com/rrohitramsen/ems [use for ems]
+scalar LocalDate
+scalar LocalDateTime
+
+# to understand this, review the [repository|service|controller] package,
+# i'm using ems [entity management framework] to reduce the rest-api code
+# root graphql
+schema{
+    mutation:Mutation
+    query:Query
+}
+
+# Ql response data type
+union DATA = AuthorResponse | BookResponse
+
+# QL response
+type QLResponse {
+    message: String!
+    status: String!
+    data: DATA
+}
+
+# [!] means that the field is non-nullable, meaning that the GraphQL service promises to always give you a value
+# when you query this field. In the type language, we’ll represent those with an exclamation mark.
+interface BaseEntity {
+    id: ID!
+    createdAt: LocalDateTime!
+    updatedAt: LocalDateTime!
+    status: GStatus!
+}
+
+# for input we will send the enum as it
+enum Format {
+    HARD_COVER,
+    PAPER_BACK,
+    EBOOK
+}
+
+# for output we will fetch the custom enum
+type GFormat {
+    code: Int!
+    name: String!
+    value: Format!
+}
+
+# for input we will send the enum as it
+enum Language {
+    ENGLISH,
+    SPANISH,
+    ARABIC
+}
+
+# for output we will fetch the custom enum
+type GLanguage {
+    code: Int!
+    name: String!
+    value: Language!
+}
+
+# for input we will send the enum as it
+enum Category {
+    FICTION,
+    NO_FICTION,
+    MYSTERY,
+    SCIENCE_FICTION
+}
+
+# for output we will fetch the custom enum
+type GCategory {
+    code: Int!
+    name: String!
+    value: Category!
+}
+
+# for input we will send the enum as it
+enum Status {
+    INACTIVE,
+    ACTIVE,
+    DELETE
+}
+
+# for output we will fetch the custom enum
+type GStatus {
+    code: Int!
+    name: String!
+    value: Status!
+}
+
+# for base interface get the referent from schema.graphqls
+type BookResponse implements BaseEntity {
+    id: ID!
+    isbn: String!
+    title: String!
+    price: Float!
+    publisher: String!
+    publication: LocalDate!
+    language: GLanguage!
+    category: GCategory!
+    format: GFormat!
+    description: String!
+    coverImg: String!
+    bookUrl: String!
+    note: String
+    author: AuthorResponse!
+    createdAt: LocalDateTime!
+    updatedAt: LocalDateTime!
+    status: GStatus!
+}
+
+# for base interface get the referent from schema.graphqls
+type AuthorResponse implements BaseEntity {
+    id: ID!
+    firstName: String
+    lastName: String!
+    email: String!
+    username: String!
+    biography: String
+    nationality: String!
+    expertise: String
+    image: String
+    books: [BookResponse]!
+    createdAt: LocalDateTime!
+    updatedAt: LocalDateTime!
+    status: GStatus!
+}
+
+# Input types
+input BookRequest {
+    id: ID
+    isbn: String
+    title: String
+    price: Float
+    publisher: String
+    publication: LocalDate
+    language: Language
+    category: Category
+    format: Format
+    description: String
+    note: String
+    author: AuthorRequest
+    status: Status
+}
+
+# Input types
+input AuthorRequest {
+    id: ID
+    firstName: String
+    lastName: String
+    email: String
+    username: String
+    biography: String
+    nationality: String
+    expertise: String
+    status: Status
+}
+
+# Mutation Api Detail
+type Mutation {
+    createAuthor(author: AuthorRequest!): QLResponse
+    updateAuthor(author: AuthorRequest!): QLResponse
+    createBook(book: BookRequest!): QLResponse
+    updateBook(book: BookRequest!): QLResponse
+    deleteBook(id: ID!): QLResponse
+}
+
+# Query Api Detail
+type Query {
+    getAuthor(id: ID!): QLResponse
+    getAllAuthors: QLResponse
+    getBook(id: ID!): QLResponse
+    getAllBooks: QLResponse
+}
