@@ -1,0 +1,15 @@
+A Curd app with below stack
+
+1) BackEnd Stack
+Java 11, Spring Boot, Spring Security, JWT, MongoDB, GraphQL, File Upload, Email
+
+2) FrontEnd Stack
+Angular 16, Ant Design, Redux, GraphQL.
+
+3) Basic Detail Cover
+
+Basic Curd [Author & Book]
+Login Author | Forgot | Reset Password
+Update Profile [Upload File Option]
+Fetch Public Book | Fetch Public Author | View Book
+Add Book To Card | [Download or Email] Card Book
