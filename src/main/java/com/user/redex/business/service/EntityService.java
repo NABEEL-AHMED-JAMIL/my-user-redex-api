@@ -1,7 +1,6 @@
 package com.user.redex.business.service;
 
 import com.user.redex.business.dto.response.QLResponse;
-
 import java.util.List;
 
 /**
@@ -16,21 +15,21 @@ public interface EntityService<R, T> {
      * @param entity
      * @return T
      */
-    QLResponse<T> createEntity(R entity);
+    QLResponse<T> createEntity(R entity) throws Exception;
 
     /**
      * Update entity
      * @param entity
      * @return T
      */
-    QLResponse<T> updateEntity(R entity);
+    QLResponse<T> updateEntity(R entity) throws Exception;
 
     /**
      * Delete entity
      * @param id
      * @return BasicEntity
      */
-    QLResponse<T> deleteEntity(String id);
+    QLResponse<T> deleteEntity(String id) throws Exception;
 
 
     /**
@@ -38,13 +37,13 @@ public interface EntityService<R, T> {
      * @param id
      * @return T
      */
-    QLResponse<T> getEntity(String id);
+    QLResponse<T> getEntity(String id) throws Exception;
 
 
     /**
      * Return List of Entities of Type T.
      * @return List of type T.
      */
-    QLResponse<List<T>> getAllEntities();
+    QLResponse<List<T>> getAllEntities() throws Exception;
 
 }
