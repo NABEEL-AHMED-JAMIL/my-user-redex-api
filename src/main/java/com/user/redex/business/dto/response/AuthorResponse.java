@@ -1,6 +1,8 @@
 package com.user.redex.business.dto.response;
 
 import com.google.gson.Gson;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,7 +19,7 @@ public class AuthorResponse extends BaseEntityResponse {
     private String nationality;
     private String expertise;
     private String image;
-    private List<BookResponse> books;
+    private List<BookResponse> books = new ArrayList<>();
 
     public String getFirstName() {
         return firstName;

@@ -1,6 +1,7 @@
 package com.user.redex.resolver;
 
 import com.user.redex.business.dto.request.BookRequest;
+import com.user.redex.business.dto.response.BookListResponse;
 import com.user.redex.business.dto.response.QLResponse;
 import com.user.redex.business.dto.response.BookResponse;
 import com.user.redex.business.service.BookService;
@@ -13,8 +14,6 @@ import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * Api use to perform crud operation
@@ -71,9 +70,9 @@ public class BookQLApi {
     }
 
     @QueryMapping
-    public QLResponse<List<BookResponse>> getAllBooks() {
+    public QLResponse<BookListResponse> getAllBooks() {
         try {
-            return this.bookService.getAllEntities();
+            return (QLResponse<BookListResponse>) this.bookService.getAllEntities();
         } catch (Exception ex) {
             logger.error("An error occurred while getAllBooks[BookResponse] ", ExceptionUtil.getRootCause(ex));
             return new QLResponse(ExceptionUtil.getRootCauseMessage(ex), ReduxUtil.ERROR);

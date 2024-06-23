@@ -1,6 +1,7 @@
 package com.user.redex.resolver;
 
 import com.user.redex.business.dto.request.AuthorRequest;
+import com.user.redex.business.dto.response.AuthorListResponse;
 import com.user.redex.business.dto.response.QLResponse;
 import com.user.redex.business.dto.response.AuthorResponse;
 import com.user.redex.util.ExceptionUtil;
@@ -13,8 +14,6 @@ import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * Api use to perform crud operation
@@ -30,6 +29,11 @@ public class AuthorQLApi {
     @Autowired
     private AuthorService authorService;
 
+    /**
+     * QL method use to create the author
+     * @param author
+     * return QLResponse<AuthorResponse>
+     * */
     @MutationMapping
     public QLResponse<AuthorResponse> createAuthor(@Argument() AuthorRequest author) {
         try {
@@ -40,6 +44,11 @@ public class AuthorQLApi {
         }
     }
 
+    /**
+     * QL method use to update the author
+     * @param author
+     * return QLResponse<AuthorResponse>
+     * */
     @MutationMapping
     public QLResponse<AuthorResponse> updateAuthor(@Argument() AuthorRequest author) {
         try {
@@ -50,6 +59,11 @@ public class AuthorQLApi {
         }
     }
 
+    /**
+     * QL method use to delete the author by id
+     * @param id
+     * return QLResponse<AuthorResponse>
+     * */
     @MutationMapping
     public QLResponse<AuthorResponse> deleteAuthor(@Argument(value = "id") String id) {
         try {
@@ -60,6 +74,11 @@ public class AuthorQLApi {
         }
     }
 
+    /**
+     * QL method use to fetch the author by id
+     * @param id
+     * return QLResponse<AuthorResponse>
+     * */
     @QueryMapping
     public QLResponse<AuthorResponse> getAuthor(@Argument(value = "id") String id) {
         try {
@@ -70,10 +89,14 @@ public class AuthorQLApi {
         }
     }
 
+    /**
+     * QL method use to fetch all the authors
+     * return QLResponse<AuthorListResponse>
+     * */
     @QueryMapping
-    public QLResponse<List<AuthorResponse>> getAllAuthors() {
+    public QLResponse<AuthorListResponse> getAllAuthors() {
         try {
-            return this.authorService.getAllEntities();
+            return (QLResponse<AuthorListResponse>) this.authorService.getAllEntities();
         } catch (Exception ex) {
             logger.error("An error occurred while getAllAuthors[List<AuthorResponse>] ", ExceptionUtil.getRootCause(ex));
             return new QLResponse(ExceptionUtil.getRootCauseMessage(ex), ReduxUtil.ERROR);

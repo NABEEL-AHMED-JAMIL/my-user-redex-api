@@ -1,7 +1,6 @@
 package com.user.redex.business.service;
 
 import com.user.redex.business.dto.response.QLResponse;
-import java.util.List;
 
 /**
  * @author Nabeel Ahmed
@@ -44,6 +43,6 @@ public interface EntityService<R, T> {
      * Return List of Entities of Type T.
      * @return List of type T.
      */
-    QLResponse<List<T>> getAllEntities() throws Exception;
+    QLResponse<?> getAllEntities() throws Exception;
 
 }

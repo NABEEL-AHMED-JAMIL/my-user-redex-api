@@ -3,6 +3,7 @@ package com.user.redex.business.service.impl;
 import com.user.redex.business.converter.AuthorConverter;
 import com.user.redex.business.converter.BookConverter;
 import com.user.redex.business.document.Author;
+import com.user.redex.business.dto.response.AuthorListResponse;
 import com.user.redex.business.dto.request.AuthorRequest;
 import com.user.redex.business.dto.response.QLResponse;
 import com.user.redex.business.dto.response.AuthorResponse;
@@ -16,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author Nabeel Ahmed
@@ -64,9 +67,9 @@ public class AuthorServiceImpl implements AuthorService {
             return new QLResponse("Author expertise required.", ReduxUtil.ERROR);
         }
         // db check author email and username
-        if (ReduxUtil.isNull(request.getEmail())) {
+        if (this.authorRepository.findByEmail(request.getEmail()).isPresent()) {
             return new QLResponse("Author email already exist.", ReduxUtil.ERROR);
-        } else if (ReduxUtil.isNull(request.getUsername())) {
+        } else if (this.authorRepository.findByUsername(request.getUsername()).isPresent()) {
             return new QLResponse("Author username already exist.", ReduxUtil.ERROR);
         }
         Author author = this.authorConverter.convertToAuthor(request, new Author());
@@ -97,7 +100,14 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public QLResponse<AuthorResponse> deleteEntity(String id) throws Exception {
         logger.info("Request For Delete Author BY ID :- " + id);
-        return null;
+        // check if author active | inactive and exist in db
+        Optional<Author> author = this.authorRepository.findByIdAndStatusNot(id, Status.DELETE);
+        if (!author.isPresent()) {
+            return new QLResponse("Author not found.", ReduxUtil.ERROR);
+        }
+        author.get().setStatus(Status.DELETE);
+        this.authorRepository.save(author.get());
+        return new QLResponse("Author delete successfully.", ReduxUtil.SUCCESS);
     }
 
     /**
@@ -109,7 +119,13 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public QLResponse<AuthorResponse> getEntity(String id) throws Exception {
         logger.info("Request For Get Author BY ID :- " + id);
-        return null;
+        // check if author active | inactive and exist in db
+        Optional<Author> author = this.authorRepository.findByIdAndStatusNot(id, Status.DELETE);
+        if (!author.isPresent()) {
+            return new QLResponse("Author not found.", ReduxUtil.ERROR);
+        }
+        return new QLResponse("Author fetch successfully.", ReduxUtil.SUCCESS,
+            this.getAuthorResponse(author.get()));
     }
 
     /**
@@ -118,8 +134,28 @@ public class AuthorServiceImpl implements AuthorService {
      * @throws Exception
      * */
     @Override
-    public QLResponse<List<AuthorResponse>> getAllEntities() throws Exception {
+    public QLResponse<AuthorListResponse> getAllEntities() throws Exception {
         logger.info("Request For Get All Authors :- ");
-        return new QLResponse("Helo pakistan", ReduxUtil.ERROR);
+        List<AuthorResponse> authorResponses = this.authorRepository.findAllByStatusNot(Status.DELETE)
+            .stream()
+            .filter(author -> author.getStatus().equals(Status.ACTIVE))
+            .map(author -> this.getAuthorResponse(author)).collect(Collectors.toList());
+        return new QLResponse("Authors fetch successfully.", ReduxUtil.SUCCESS,
+            new AuthorListResponse(authorResponses));
+    }
+
+    /**
+     * Method use to get the author
+     * @param author
+     * @return AuthorResponse
+     * */
+    private AuthorResponse getAuthorResponse(Author author) {
+        AuthorResponse authorResponse = this.authorConverter.convertToAuthor(author);
+        if (!ReduxUtil.isNull(author.getBooks())) {
+            authorResponse.setBooks(author.getBooks().stream()
+                .map(book -> this.bookConverter.convertToBook(book))
+                .collect(Collectors.toList()));
+        }
+        return authorResponse;
     }
 }
