@@ -8,14 +8,14 @@ import java.util.List;
  */
 public class AuthorRequest extends BaseEntityRequest {
 
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String username;
-    private String password;
-    private String biography;
-    private String nationality;
-    private String expertise;
+    private String firstName; // yes
+    private String lastName; // yes
+    private String email; // yes
+    private String username; // yes
+    private String password; // yes
+    private String biography; // yes
+    private String nationality; // yes
+    private String expertise; // yes
     private String image;
     private List<BookRequest> books;
 

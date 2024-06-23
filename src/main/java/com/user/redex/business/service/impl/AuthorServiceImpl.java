@@ -2,9 +2,11 @@ package com.user.redex.business.service.impl;
 
 import com.user.redex.business.converter.AuthorConverter;
 import com.user.redex.business.converter.BookConverter;
+import com.user.redex.business.document.Author;
 import com.user.redex.business.dto.request.AuthorRequest;
 import com.user.redex.business.dto.response.QLResponse;
 import com.user.redex.business.dto.response.AuthorResponse;
+import com.user.redex.business.enums.Status;
 import com.user.redex.business.repository.AuthorRepository;
 import com.user.redex.business.service.AuthorService;
 import com.user.redex.util.ReduxUtil;
@@ -36,14 +38,42 @@ public class AuthorServiceImpl implements AuthorService {
 
     /**
      * Method use to create the author/register
-     * @param entity
+     * Basic validation on ui/form side here double check
+     * @param request
      * @return QLResponse<AuthorResponse>
      * @throws Exception
      * */
     @Override
-    public QLResponse<AuthorResponse> createEntity(AuthorRequest entity) throws Exception {
-        logger.info("Request For New Author :- " + entity);
-        return null;
+    public QLResponse<AuthorResponse> createEntity(AuthorRequest request) throws Exception {
+        logger.info("Request For New Author :- " + request);
+        if (ReduxUtil.isNull(request.getFirstName())) {
+            return new QLResponse("Author firstName required.", ReduxUtil.ERROR);
+        } else if (ReduxUtil.isNull(request.getLastName())) {
+            return new QLResponse("Author lastName required.", ReduxUtil.ERROR);
+        } else if (ReduxUtil.isNull(request.getEmail())) {
+            return new QLResponse("Author email required.", ReduxUtil.ERROR);
+        } else if (ReduxUtil.isNull(request.getUsername())) {
+            return new QLResponse("Author username required.", ReduxUtil.ERROR);
+        } else if (ReduxUtil.isNull(request.getPassword())) {
+            return new QLResponse("Author password required.", ReduxUtil.ERROR);
+        } else if (ReduxUtil.isNull(request.getBiography())) {
+            return new QLResponse("Author biography required.", ReduxUtil.ERROR);
+        } else if (ReduxUtil.isNull(request.getNationality())) {
+            return new QLResponse("Author nationality required.", ReduxUtil.ERROR);
+        } else if (ReduxUtil.isNull(request.getExpertise())) {
+            return new QLResponse("Author expertise required.", ReduxUtil.ERROR);
+        }
+        // db check author email and username
+        if (ReduxUtil.isNull(request.getEmail())) {
+            return new QLResponse("Author email already exist.", ReduxUtil.ERROR);
+        } else if (ReduxUtil.isNull(request.getUsername())) {
+            return new QLResponse("Author username already exist.", ReduxUtil.ERROR);
+        }
+        Author author = this.authorConverter.convertToAuthor(request, new Author());
+        author.setStatus(Status.ACTIVE);
+        author = this.authorRepository.save(author);
+        AuthorResponse authorResponse = this.authorConverter.convertToAuthor(author);
+        return new QLResponse("Author save successfully.", ReduxUtil.SUCCESS, authorResponse);
     }
 
     /**

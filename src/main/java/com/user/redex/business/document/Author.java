@@ -13,7 +13,9 @@ public class Author extends BaseEntity {
 
     private String firstName;
     private String lastName;
+    @Indexed(unique = true)
     private String email;
+    @Indexed(unique = true)
     private String username;
     private String password;
     private String biography;

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Author Registration Successful</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f6f6f6;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            background-color: #ffffff;
+            margin: 50px auto;
+            padding: 20px;
+            max-width: 600px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background-color: #4CAF50;
+            color: #ffffff;
+            padding: 10px 0;
+            text-align: center;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+        .content {
+            padding: 20px;
+        }
+        .content h1 {
+            color: #333333;
+        }
+        .content p {
+            color: #555555;
+            line-height: 1.6;
+        }
+        .footer {
+            text-align: center;
+            padding: 10px;
+            font-size: 12px;
+            color: #888888;
+        }
+        .footer a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 20px 0;
+            background-color: #4CAF50;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Registration Successful</h2>
+        </div>
+        <div class="content">
+            <h1>Welcome to QNL!</h1>
+            <p>Dear ${fullName},</p>
+            <p>Congratulations! Your registration as an author on <b>QNL</b> has been successful. We are thrilled to have you on board and can't wait to see the amazing content you will create.</p>
+            <p>You can now log in to your account and start contributing to our community. If you have any questions or need assistance, please do not hesitate to reach out to our support team.</p>
+            <p>Best regards,</p>
+            <p>The QNL Team</p>
+            <a href="[Login URL]" class="button">Log In</a>
+        </div>
+        <div class="footer">
+            <p>&copy; 2024 [NABEEL-AHMED-JAMIL]. All rights open source.</p>
+        </div>
+    </div>
+</body>
+</html>
