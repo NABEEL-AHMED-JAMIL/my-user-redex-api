@@ -62,27 +62,6 @@ public class RemoteFileExchange {
         logger.debug("+================AWS-S3-END====================+");
     }
 
-    public Boolean isBucketExist(String bucketName) throws AmazonClientException {
-        if (!bucketName.isEmpty()) {
-            logger.info("Bucket :- " + this.amazonS3.listBuckets());
-            return this.amazonS3.doesBucketExist(getBucketName(bucketName));
-        }
-        throw new AmazonClientException("Invalid bucket name");
-    }
-
-    /**
-     * Method use to check obj exist or not
-     * @param bucketName
-     * @return Boolean
-     * @throws AmazonClientException
-     * */
-    public Boolean isObjKeyExist(String bucketName, String objectKey) throws AmazonClientException {
-        if (isBucketExist(bucketName) && (objectKey != null && !objectKey.equals(""))) {
-            return this.amazonS3.doesObjectExist(getBucketName(bucketName),objectKey);
-        }
-        throw new AmazonClientException("Invalid objectKey name");
-    }
-
     /**
      * Method use to upload object to bucket
      * @param bucketName
@@ -115,17 +94,6 @@ public class RemoteFileExchange {
         }
         logger.info("Upload File Detail Aws :- " + putObjectResult.toString());
         return resultObject;
-    }
-
-    /**
-     * Method use to get the metadata of object detail
-     * @param bucketName
-     * @param objKey
-     * @return S3ObjectInputStream
-     * @throws AmazonClientException
-     * */
-    public S3ObjectInputStream getObjectMetadata(String bucketName, String objKey) throws AmazonClientException {
-        return this.amazonS3.getObject(new GetObjectRequest(getBucketName(bucketName), objKey)).getObjectContent();
     }
 
     private String getBucketName(String bucket) {
