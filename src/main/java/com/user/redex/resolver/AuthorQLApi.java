@@ -1,8 +1,10 @@
 package com.user.redex.resolver;
 
+import com.google.gson.Gson;
 import com.user.redex.business.dto.request.AuthorRequest;
+import com.user.redex.business.dto.request.FileUploadRequest;
 import com.user.redex.business.dto.response.AuthorListResponse;
-import com.user.redex.business.dto.response.QLResponse;
+import com.user.redex.business.dto.response.GQLResponse;
 import com.user.redex.business.dto.response.AuthorResponse;
 import com.user.redex.util.ExceptionUtil;
 import com.user.redex.util.ReduxUtil;
@@ -13,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -35,12 +39,12 @@ public class AuthorQLApi {
      * return QLResponse<AuthorResponse>
      * */
     @MutationMapping
-    public QLResponse<AuthorResponse> createAuthor(@Argument() AuthorRequest author) {
+    public GQLResponse<AuthorResponse> createAuthor(@Argument() AuthorRequest author) {
         try {
             return this.authorService.createEntity(author);
         } catch (Exception ex) {
             logger.error("An error occurred while createAuthor[AuthorResponse] ", ExceptionUtil.getRootCause(ex));
-            return new QLResponse(ExceptionUtil.getRootCauseMessage(ex), ReduxUtil.ERROR);
+            return new GQLResponse(ExceptionUtil.getRootCauseMessage(ex), ReduxUtil.ERROR);
         }
     }
 
@@ -50,12 +54,12 @@ public class AuthorQLApi {
      * return QLResponse<AuthorResponse>
      * */
     @MutationMapping
-    public QLResponse<AuthorResponse> updateAuthor(@Argument() AuthorRequest author) {
+    public GQLResponse<AuthorResponse> updateAuthor(@Argument() AuthorRequest author) {
         try {
             return this.authorService.updateEntity(author);
         } catch (Exception ex) {
             logger.error("An error occurred while updateAuthor[AuthorResponse] ", ExceptionUtil.getRootCause(ex));
-            return new QLResponse(ExceptionUtil.getRootCauseMessage(ex), ReduxUtil.ERROR);
+            return new GQLResponse(ExceptionUtil.getRootCauseMessage(ex), ReduxUtil.ERROR);
         }
     }
 
@@ -65,12 +69,12 @@ public class AuthorQLApi {
      * return QLResponse<AuthorResponse>
      * */
     @MutationMapping
-    public QLResponse<AuthorResponse> deleteAuthor(@Argument(value = "id") String id) {
+    public GQLResponse<AuthorResponse> deleteAuthor(@Argument(value = "id") String id) {
         try {
             return this.authorService.deleteEntity(id);
         } catch (Exception ex) {
             logger.error("An error occurred while deleteAuthor[AuthorResponse] ", ExceptionUtil.getRootCause(ex));
-            return new QLResponse(ExceptionUtil.getRootCauseMessage(ex), ReduxUtil.ERROR);
+            return new GQLResponse(ExceptionUtil.getRootCauseMessage(ex), ReduxUtil.ERROR);
         }
     }
 
@@ -80,12 +84,12 @@ public class AuthorQLApi {
      * return QLResponse<AuthorResponse>
      * */
     @QueryMapping
-    public QLResponse<AuthorResponse> getAuthor(@Argument(value = "id") String id) {
+    public GQLResponse<AuthorResponse> getAuthor(@Argument(value = "id") String id) {
         try {
             return this.authorService.getEntity(id);
         } catch (Exception ex) {
             logger.error("An error occurred while getAuthor[AuthorResponse] ", ExceptionUtil.getRootCause(ex));
-            return new QLResponse(ExceptionUtil.getRootCauseMessage(ex), ReduxUtil.ERROR);
+            return new GQLResponse(ExceptionUtil.getRootCauseMessage(ex), ReduxUtil.ERROR);
         }
     }
 
@@ -94,12 +98,37 @@ public class AuthorQLApi {
      * return QLResponse<AuthorListResponse>
      * */
     @QueryMapping
-    public QLResponse<AuthorListResponse> getAllAuthors() {
+    public GQLResponse<AuthorListResponse> getAllAuthors() {
         try {
-            return (QLResponse<AuthorListResponse>) this.authorService.getAllEntities();
+            return (GQLResponse<AuthorListResponse>) this.authorService.getAllEntities();
         } catch (Exception ex) {
-            logger.error("An error occurred while getAllAuthors[List<AuthorResponse>] ", ExceptionUtil.getRootCause(ex));
-            return new QLResponse(ExceptionUtil.getRootCauseMessage(ex), ReduxUtil.ERROR);
+            logger.error("An error occurred while getAllAuthors[AuthorListResponse] ",
+                ExceptionUtil.getRootCause(ex));
+            return new GQLResponse(ExceptionUtil.getRootCauseMessage(ex), ReduxUtil.ERROR);
+        }
+    }
+
+    /**
+     * Rest-API for upload the file.
+     * QL not direct support to file upload for upload with ql you need to add extra dependency
+     * so avoid this and using rest api
+     * @param requestPayload
+     * return QLResponse<AuthorListResponse>
+     * */
+    @RequestMapping(value = "/uploadAuthorImage", method = RequestMethod.POST)
+    public GQLResponse<AuthorResponse> uploadAuthorImage(FileUploadRequest requestPayload) {
+        try {
+            if (ReduxUtil.isNull(requestPayload.getFile())) {
+                return new GQLResponse<>("Author file required.", ReduxUtil.ERROR);
+            } else if (ReduxUtil.isNull(requestPayload.getData())) {
+                return new GQLResponse<>("Author payload required.", ReduxUtil.ERROR);
+            }
+            AuthorRequest authorRequest = new Gson().fromJson(requestPayload.getData(), AuthorRequest.class);
+            return this.authorService.uploadAuthorImage(requestPayload.getFile(), authorRequest);
+        } catch (Exception ex) {
+            logger.error("An error occurred while uploadAuthorImage[AuthorResponse] ",
+                ExceptionUtil.getRootCause(ex));
+            return new GQLResponse(ExceptionUtil.getRootCauseMessage(ex), ReduxUtil.ERROR);
         }
     }
 

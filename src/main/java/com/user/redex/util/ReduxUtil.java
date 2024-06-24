@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
  */
 public class ReduxUtil {
 
+    public final static String BUCKET =  "ttender-bucket";
     public final static String ERROR = "ERROR";
     public final static String SUCCESS = "SUCCESS";
 

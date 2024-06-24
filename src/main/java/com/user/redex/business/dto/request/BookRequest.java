@@ -1,5 +1,7 @@
 package com.user.redex.business.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.gson.Gson;
 import com.user.redex.business.enums.Category;
 import com.user.redex.business.enums.Format;
@@ -9,21 +11,23 @@ import java.time.LocalDate;
 /**
  * @author Nabeel Ahmed
  */
+@JsonIgnoreProperties(ignoreUnknown=true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class BookRequest extends BaseEntityRequest {
 
-    private String isbn; // yes
-    private String title; // yes
-    private Double price; // yes
-    private String publisher; // yes
-    private LocalDate publication; // yes
-    private Language language; // yes
-    private Category Category; // yes
-    private Format format; // yes
-    private String description; // yes
-    private String coverImg; // yes
-    private String bookUrl; // yes
-    private String note; // yes
-    private AuthorRequest author; // yes
+    private String isbn;
+    private String title;
+    private Double price;
+    private String publisher;
+    private LocalDate publication;
+    private Language language;
+    private Category Category;
+    private Format format;
+    private String description;
+    private String coverImg;
+    private String bookUrl;
+    private String note;
+    private AuthorRequest author;
 
     public BookRequest() {
     }

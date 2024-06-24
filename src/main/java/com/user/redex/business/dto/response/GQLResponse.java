@@ -1,22 +1,26 @@
 package com.user.redex.business.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.gson.Gson;
 
 /**
  * @author Nabeel Ahmed
  */
-public class QLResponse<T> {
+@JsonIgnoreProperties(ignoreUnknown=true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class GQLResponse<T> {
 
     private T data;
     private final String status;
     private final String message;
 
-    public QLResponse(String message, String status) {
+    public GQLResponse(String message, String status) {
         this.message = message;
         this.status = status;
     }
 
-    public QLResponse(String message, String status, T data) {
+    public GQLResponse(String message, String status, T data) {
         this.message = message;
         this.status = status;
         this.data = data;

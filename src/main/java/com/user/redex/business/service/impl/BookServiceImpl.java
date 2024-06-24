@@ -4,7 +4,7 @@ import com.user.redex.business.converter.AuthorConverter;
 import com.user.redex.business.converter.BookConverter;
 import com.user.redex.business.dto.request.BookRequest;
 import com.user.redex.business.dto.response.BookListResponse;
-import com.user.redex.business.dto.response.QLResponse;
+import com.user.redex.business.dto.response.GQLResponse;
 import com.user.redex.business.dto.response.BookResponse;
 import com.user.redex.business.repository.AuthorRepository;
 import com.user.redex.business.repository.BookRepository;
@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * @author Nabeel Ahmed
@@ -44,7 +43,7 @@ public class BookServiceImpl implements BookService {
      * @throws Exception
      * */
     @Override
-    public QLResponse<BookResponse> createEntity(BookRequest entity) throws Exception {
+    public GQLResponse<BookResponse> createEntity(BookRequest entity) throws Exception {
         logger.info("Request For New Book :- " + entity);
         return null;
     }
@@ -56,7 +55,7 @@ public class BookServiceImpl implements BookService {
      * @throws Exception
      * */
     @Override
-    public QLResponse<BookResponse> updateEntity(BookRequest entity) throws Exception {
+    public GQLResponse<BookResponse> updateEntity(BookRequest entity) throws Exception {
         logger.info("Request For Update Book :- " + entity);
         return null;
     }
@@ -68,7 +67,7 @@ public class BookServiceImpl implements BookService {
      * @throws Exception
      * */
     @Override
-    public QLResponse<BookResponse> deleteEntity(String id) throws Exception {
+    public GQLResponse<BookResponse> deleteEntity(String id) throws Exception {
         logger.info("Request For Delete Book BY ID :- " + id);
         return null;
     }
@@ -80,7 +79,7 @@ public class BookServiceImpl implements BookService {
      * @throws Exception
      * */
     @Override
-    public QLResponse<BookResponse> getEntity(String id) throws Exception {
+    public GQLResponse<BookResponse> getEntity(String id) throws Exception {
         logger.info("Request For Get Book BY ID :- " + id);
         return null;
     }
@@ -91,7 +90,7 @@ public class BookServiceImpl implements BookService {
      * @throws Exception
      * */
     @Override
-    public QLResponse<BookListResponse> getAllEntities() throws Exception {
+    public GQLResponse<BookListResponse> getAllEntities() throws Exception {
         logger.info("Request For Get All Books :- ");
         return null;
     }

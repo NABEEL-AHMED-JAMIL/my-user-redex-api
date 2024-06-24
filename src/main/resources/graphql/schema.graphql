@@ -69,7 +69,7 @@ interface BaseEntity {
 union DATA = AuthorResponse | AuthorListResponse | BookResponse | BookListResponse
 
 # Response Type
-type QLResponse {
+type GQLResponse {
     message: String!
     status: String!
     data: DATA
@@ -153,24 +153,24 @@ input AuthorRequest {
 
 # Mutation API
 type Mutation {
-    createAuthor(author: AuthorRequest!): QLResponse
-    updateAuthor(author: AuthorRequest!): QLResponse
-    deleteAuthor(id: ID!): QLResponse
-    createBook(book: BookRequest!): QLResponse
-    updateBook(book: BookRequest!): QLResponse
-    deleteBook(id: ID!): QLResponse
+    createAuthor(author: AuthorRequest!): GQLResponse
+    updateAuthor(author: AuthorRequest!): GQLResponse
+    deleteAuthor(id: ID!): GQLResponse
+    createBook(book: BookRequest!): GQLResponse
+    updateBook(book: BookRequest!): GQLResponse
+    deleteBook(id: ID!): GQLResponse
 }
 
 # Query API
 type Query {
-    # secure ql only access after login
-    getAuthor(id: ID!): QLResponse
-    getAllAuthors: QLResponse
-    getBook(id: ID!): QLResponse
-    getAllBooks: QLResponse
-    # public ql
-    fetchPublicBooks: QLResponse
-    fetchPublicAuthors: QLResponse
+    # secure GQL only access after login
+    getAuthor(id: ID!): GQLResponse
+    getAllAuthors: GQLResponse
+    getBook(id: ID!): GQLResponse
+    getAllBooks: GQLResponse
+    # public GQL
+    fetchPublicBooks: GQLResponse
+    fetchPublicAuthors: GQLResponse
 }
 
 # Schema Entry Point

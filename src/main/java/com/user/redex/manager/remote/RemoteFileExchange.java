@@ -108,7 +108,8 @@ public class RemoteFileExchange {
         resultObject.put(FILE_PATH, objKey);
         // only show the url in log if its allow public read access
         if (isPublicAccess) {
-            String fileUrl = String.format(FILE_URL_PATTERN, this.storageUrl, this.bucketId, bucketName, objKey);
+            String fileUrl = String.format(FILE_URL_PATTERN,
+                this.storageUrl, this.bucketId, bucketName, objKey);
             resultObject.put(PUBLIC_FILE, fileUrl);
             logger.info("File Url :- " + fileUrl);
         }

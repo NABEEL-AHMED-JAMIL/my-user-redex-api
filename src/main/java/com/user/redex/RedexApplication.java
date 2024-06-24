@@ -10,7 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
  * @author Nabeel Ahmed
  */
 @SpringBootApplication
-@ComponentScan(value = "com.user.redex.*")
+@ComponentScan(basePackages = {"com.user.redex.*"})
 public class RedexApplication {
 
 	private Logger logger = LoggerFactory.getLogger(RedexApplication.class);

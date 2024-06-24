@@ -1,7 +1,6 @@
 package com.user.redex.resolver;
 
-import com.user.redex.business.dto.response.QLResponse;
-
+import com.user.redex.business.dto.response.GQLResponse;
 import java.util.List;
 
 /**
@@ -18,21 +17,21 @@ public interface IEntityQLApi<R, T> {
      * @param entity
      * @return T
      */
-    QLResponse<T> createEntity(R entity);
+    GQLResponse<T> createEntity(R entity);
 
     /**
      * Update entity
      * @param entity
      * @return T
      */
-    QLResponse<T> updateEntity(R entity);
+    GQLResponse<T> updateEntity(R entity);
 
     /**
      * Delete entity
      * @param id
      * @return BasicEntity
      */
-    QLResponse<T> deleteEntity(String id);
+    GQLResponse<T> deleteEntity(String id);
 
 
     /**
@@ -40,13 +39,13 @@ public interface IEntityQLApi<R, T> {
      * @param id
      * @return T
      */
-    QLResponse<T> getEntity(String id);
+    GQLResponse<T> getEntity(String id);
 
 
     /**
      * Return List of Entities of Type T.
      * @return List of type T.
      */
-    QLResponse<List<T>> getAllEntities();
+    GQLResponse<List<T>> getAllEntities();
 
 }

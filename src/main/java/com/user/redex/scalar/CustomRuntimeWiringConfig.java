@@ -17,6 +17,10 @@ public class CustomRuntimeWiringConfig implements RuntimeWiringConfigurer {
 
     public CustomRuntimeWiringConfig() {}
 
+    /**
+     * Method use to bind all scalar runtime
+     * @param builder
+     * */
     @Override
     public void configure(RuntimeWiring.Builder builder) {
         builder
@@ -25,6 +29,10 @@ public class CustomRuntimeWiringConfig implements RuntimeWiringConfigurer {
             .build();
     }
 
+    /**
+     * Scalar type for local date
+     * @return GraphQLScalarType[LocalDate]
+     * */
     public GraphQLScalarType localDateType() {
         return GraphQLScalarType.newScalar()
             .name("LocalDate")
@@ -33,6 +41,10 @@ public class CustomRuntimeWiringConfig implements RuntimeWiringConfigurer {
             .build();
     }
 
+    /**
+     * Scalar type for local date time
+     * @return GraphQLScalarType[LocalDateTimeScalar]
+     * */
     public GraphQLScalarType localDateTimeType() {
         return GraphQLScalarType.newScalar()
             .name("LocalDateTime")

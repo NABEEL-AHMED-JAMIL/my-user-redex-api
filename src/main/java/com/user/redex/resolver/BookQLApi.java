@@ -2,7 +2,7 @@ package com.user.redex.resolver;
 
 import com.user.redex.business.dto.request.BookRequest;
 import com.user.redex.business.dto.response.BookListResponse;
-import com.user.redex.business.dto.response.QLResponse;
+import com.user.redex.business.dto.response.GQLResponse;
 import com.user.redex.business.dto.response.BookResponse;
 import com.user.redex.business.service.BookService;
 import com.user.redex.util.ExceptionUtil;
@@ -30,52 +30,52 @@ public class BookQLApi {
     private BookService bookService;
 
     @MutationMapping
-    public QLResponse<BookResponse> createBook(@Argument() BookRequest book) {
+    public GQLResponse<BookResponse> createBook(@Argument() BookRequest book) {
         try {
             return this.bookService.createEntity(book);
         } catch (Exception ex) {
             logger.error("An error occurred while createBook[BookResponse] ", ExceptionUtil.getRootCause(ex));
-            return new QLResponse(ExceptionUtil.getRootCauseMessage(ex), ReduxUtil.ERROR);
+            return new GQLResponse(ExceptionUtil.getRootCauseMessage(ex), ReduxUtil.ERROR);
         }
     }
 
     @MutationMapping
-    public QLResponse<BookResponse> updateBook(@Argument() BookRequest book) {
+    public GQLResponse<BookResponse> updateBook(@Argument() BookRequest book) {
         try {
             return this.bookService.updateEntity(book);
         } catch (Exception ex) {
             logger.error("An error occurred while updateBook[BookResponse] ", ExceptionUtil.getRootCause(ex));
-            return new QLResponse(ExceptionUtil.getRootCauseMessage(ex), ReduxUtil.ERROR);
+            return new GQLResponse(ExceptionUtil.getRootCauseMessage(ex), ReduxUtil.ERROR);
         }
     }
 
     @MutationMapping
-    public QLResponse<BookResponse> deleteBook(@Argument(value = "id") String id) {
+    public GQLResponse<BookResponse> deleteBook(@Argument(value = "id") String id) {
         try {
             return this.bookService.deleteEntity(id);
         } catch (Exception ex) {
             logger.error("An error occurred while deleteBook[BookResponse] ", ExceptionUtil.getRootCause(ex));
-            return new QLResponse(ExceptionUtil.getRootCauseMessage(ex), ReduxUtil.ERROR);
+            return new GQLResponse(ExceptionUtil.getRootCauseMessage(ex), ReduxUtil.ERROR);
         }
     }
 
     @QueryMapping
-    public QLResponse<BookResponse> getBook(@Argument(value = "id") String id) {
+    public GQLResponse<BookResponse> getBook(@Argument(value = "id") String id) {
         try {
             return this.bookService.getEntity(id);
         } catch (Exception ex) {
             logger.error("An error occurred while getBook[BookResponse] ", ExceptionUtil.getRootCause(ex));
-            return new QLResponse(ExceptionUtil.getRootCauseMessage(ex), ReduxUtil.ERROR);
+            return new GQLResponse(ExceptionUtil.getRootCauseMessage(ex), ReduxUtil.ERROR);
         }
     }
 
     @QueryMapping
-    public QLResponse<BookListResponse> getAllBooks() {
+    public GQLResponse<BookListResponse> getAllBooks() {
         try {
-            return (QLResponse<BookListResponse>) this.bookService.getAllEntities();
+            return (GQLResponse<BookListResponse>) this.bookService.getAllEntities();
         } catch (Exception ex) {
-            logger.error("An error occurred while getAllBooks[BookResponse] ", ExceptionUtil.getRootCause(ex));
-            return new QLResponse(ExceptionUtil.getRootCauseMessage(ex), ReduxUtil.ERROR);
+            logger.error("An error occurred while getAllBooks[BookListResponse] ", ExceptionUtil.getRootCause(ex));
+            return new GQLResponse(ExceptionUtil.getRootCauseMessage(ex), ReduxUtil.ERROR);
         }
     }
 

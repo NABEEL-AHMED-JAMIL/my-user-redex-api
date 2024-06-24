@@ -1,5 +1,7 @@
 package com.user.redex.business.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.gson.Gson;
 import com.user.redex.business.enums.Category;
 import com.user.redex.business.enums.Format;
@@ -9,6 +11,8 @@ import java.time.LocalDate;
 /**
  * @author Nabeel Ahmed
  */
+@JsonIgnoreProperties(ignoreUnknown=true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class BookResponse extends BaseEntityResponse {
 
     private String isbn;

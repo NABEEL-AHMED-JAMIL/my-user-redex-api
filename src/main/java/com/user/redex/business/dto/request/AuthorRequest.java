@@ -1,21 +1,25 @@
 package com.user.redex.business.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.gson.Gson;
 import java.util.List;
 
 /**
  * @author Nabeel Ahmed
  */
+@JsonIgnoreProperties(ignoreUnknown=true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class AuthorRequest extends BaseEntityRequest {
 
-    private String firstName; // yes
-    private String lastName; // yes
-    private String email; // yes
-    private String username; // yes
-    private String password; // yes
-    private String biography; // yes
-    private String nationality; // yes
-    private String expertise; // yes
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String username;
+    private String password;
+    private String biography;
+    private String nationality;
+    private String expertise;
     private String image;
     private List<BookRequest> books;
 

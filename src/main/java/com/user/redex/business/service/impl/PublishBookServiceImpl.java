@@ -4,7 +4,7 @@ import com.user.redex.business.dto.response.AuthorListResponse;
 import com.user.redex.business.dto.response.BookListResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.user.redex.business.dto.response.QLResponse;
+import com.user.redex.business.dto.response.GQLResponse;
 import com.user.redex.business.service.AuthorService;
 import com.user.redex.business.service.BookService;
 import com.user.redex.business.service.PublishBookService;
@@ -29,9 +29,9 @@ public class PublishBookServiceImpl implements PublishBookService {
      * @return QLResponse<BookListResponse>
      * @throws Exception
      * */
-    public QLResponse<BookListResponse> fetchPublicBooks() throws Exception {
+    public GQLResponse<BookListResponse> fetchPublicBooks() throws Exception {
         logger.info("Request For Fetch List Books.");
-        return (QLResponse<BookListResponse>) this.bookService.getAllEntities();
+        return (GQLResponse<BookListResponse>) this.bookService.getAllEntities();
     }
 
     /**
@@ -39,9 +39,9 @@ public class PublishBookServiceImpl implements PublishBookService {
      * @return QLResponse<AuthorListResponse>
      * @throws Exception
      * */
-    public QLResponse<AuthorListResponse> fetchPublicAuthors() throws Exception {
+    public GQLResponse<AuthorListResponse> fetchPublicAuthors() throws Exception {
         logger.info("Request For Fetch List Authors.");
-        return (QLResponse<AuthorListResponse>) this.authorService.getAllEntities();
+        return (GQLResponse<AuthorListResponse>) this.authorService.getAllEntities();
     }
 
 }
