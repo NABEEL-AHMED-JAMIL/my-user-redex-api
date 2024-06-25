@@ -15,6 +15,7 @@ import com.user.redex.util.ReduxUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
@@ -41,6 +42,8 @@ public class AuthorServiceImpl implements AuthorService {
     private AuthorRepository authorRepository;
     @Autowired
     private RemoteFileExchange remoteFileExchange;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public AuthorServiceImpl() {
     }
@@ -71,6 +74,8 @@ public class AuthorServiceImpl implements AuthorService {
             return new GQLResponse("Author nationality required.", ReduxUtil.ERROR);
         } else if (ReduxUtil.isNull(payload.getExpertise())) {
             return new GQLResponse("Author expertise required.", ReduxUtil.ERROR);
+        } else if (ReduxUtil.isNull(payload.getRole())) {
+            return new GQLResponse("Author role required.", ReduxUtil.ERROR);
         }
         // db check author email and username
         if (this.authorRepository.findByEmail(payload.getEmail()).isPresent()) {
@@ -79,6 +84,8 @@ public class AuthorServiceImpl implements AuthorService {
             return new GQLResponse("Author username already exist.", ReduxUtil.ERROR);
         }
         Author author = this.authorConverter.convertToAuthor(payload, new Author());
+        author.setPassword(this.passwordEncoder.encode(payload.getPassword()));
+        author.setRole(payload.getRole());
         author.setStatus(Status.ACTIVE);
         author = this.authorRepository.save(author);
         AuthorResponse authorResponse = this.authorConverter.convertToAuthor(author);

@@ -7,7 +7,7 @@ scalar LocalDate
 scalar LocalDateTime
 
 enum Role {
-    NORMAL
+    USER
     ADMIN
 }
 

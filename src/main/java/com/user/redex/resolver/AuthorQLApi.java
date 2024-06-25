@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Nabeel Ahmed
  * Implements IEntityQLApi<AuthorRequest, AuthorResponse> not worked due to this statment
  * [GraphQL exposes a single endpoint URL for all queries and mutations]
+ * @author Nabeel Ahmed
  */
 @RestController
 public class AuthorQLApi {
@@ -39,6 +41,7 @@ public class AuthorQLApi {
      * return QLResponse<AuthorResponse>
      * */
     @MutationMapping
+    @PreAuthorize("isAnonymous()")
     public GQLResponse<AuthorResponse> createAuthor(@Argument() AuthorRequest payload) {
         try {
             return this.authorService.createEntity(payload);
@@ -54,6 +57,7 @@ public class AuthorQLApi {
      * return QLResponse<AuthorResponse>
      * */
     @MutationMapping
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     public GQLResponse<AuthorResponse> updateAuthor(@Argument() AuthorRequest payload) {
         try {
             return this.authorService.updateEntity(payload);
@@ -69,6 +73,7 @@ public class AuthorQLApi {
      * return QLResponse<AuthorResponse>
      * */
     @MutationMapping
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     public GQLResponse<AuthorResponse> deleteAuthor(@Argument(value = "id") String id) {
         try {
             return this.authorService.deleteEntity(id);
@@ -84,6 +89,7 @@ public class AuthorQLApi {
      * return QLResponse<AuthorResponse>
      * */
     @QueryMapping
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     public GQLResponse<AuthorResponse> getAuthor(@Argument(value = "id") String id) {
         try {
             return this.authorService.getEntity(id);
@@ -98,6 +104,7 @@ public class AuthorQLApi {
      * return QLResponse<AuthorListResponse>
      * */
     @QueryMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public GQLResponse<AuthorListResponse> getAllAuthors() {
         try {
             return (GQLResponse<AuthorListResponse>) this.authorService.getAllEntities();
@@ -116,6 +123,7 @@ public class AuthorQLApi {
      * return QLResponse<AuthorListResponse>
      * */
     @RequestMapping(value = "/uploadAuthorImage", method = RequestMethod.POST)
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     public GQLResponse<AuthorResponse> uploadAuthorImage(FileUploadRequest payload) {
         try {
             if (ReduxUtil.isNull(payload.getFile())) {

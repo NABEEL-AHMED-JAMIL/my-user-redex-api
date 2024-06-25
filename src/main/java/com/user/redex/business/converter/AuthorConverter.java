@@ -55,6 +55,7 @@ public class AuthorConverter {
         authorResponse.setImage(author.getImage());
         authorResponse.setCreatedAt(author.getCreatedAt());
         authorResponse.setUpdatedAt(author.getUpdatedAt());
+        authorResponse.setRole(author.getRole());
         if (!ReduxUtil.isNull(author.getStatus())) {
             GEnum status = new GEnum(author.getStatus().getCode(),
                 author.getStatus().getName(), author.getStatus());

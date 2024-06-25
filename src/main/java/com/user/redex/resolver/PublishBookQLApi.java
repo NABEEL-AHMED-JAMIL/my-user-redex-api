@@ -9,6 +9,7 @@ import com.user.redex.util.ReduxUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -27,6 +28,7 @@ public class PublishBookQLApi {
      * QLResponse<List<BookResponse>>
      * */
     @QueryMapping
+    @PreAuthorize("isAnonymous()")
     public GQLResponse<BookListResponse> fetchPublicBooks() {
         try {
             return this.publishBookService.fetchPublicBooks();
@@ -41,6 +43,7 @@ public class PublishBookQLApi {
      * QLResponse<AuthorListResponse>
      * */
     @QueryMapping
+    @PreAuthorize("isAnonymous()")
     public GQLResponse<AuthorListResponse> fetchPublicAuthors() {
         try {
             return this.publishBookService.fetchPublicAuthors();

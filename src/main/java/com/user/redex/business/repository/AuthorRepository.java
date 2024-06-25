@@ -12,6 +12,8 @@ import java.util.Optional;
 @Repository
 public interface AuthorRepository extends EntityRepository<Author> {
 
+    Optional<Author> findByUsernameAndStatus(String username, Status status);
+
     Optional<Author> findByIdAndStatusNot(String id, Status status);
 
     List<Author> findAllByStatusNot(Status status);

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -30,6 +31,7 @@ public class BookQLApi {
     private BookService bookService;
 
     @MutationMapping
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     public GQLResponse<BookResponse> createBook(@Argument() BookRequest book) {
         try {
             return this.bookService.createEntity(book);
@@ -40,6 +42,7 @@ public class BookQLApi {
     }
 
     @MutationMapping
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     public GQLResponse<BookResponse> updateBook(@Argument() BookRequest book) {
         try {
             return this.bookService.updateEntity(book);
@@ -50,6 +53,7 @@ public class BookQLApi {
     }
 
     @MutationMapping
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     public GQLResponse<BookResponse> deleteBook(@Argument(value = "id") String id) {
         try {
             return this.bookService.deleteEntity(id);
@@ -60,6 +64,7 @@ public class BookQLApi {
     }
 
     @QueryMapping
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     public GQLResponse<BookResponse> getBook(@Argument(value = "id") String id) {
         try {
             return this.bookService.getEntity(id);
@@ -70,6 +75,7 @@ public class BookQLApi {
     }
 
     @QueryMapping
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     public GQLResponse<BookListResponse> getAllBooks() {
         try {
             return (GQLResponse<BookListResponse>) this.bookService.getAllEntities();

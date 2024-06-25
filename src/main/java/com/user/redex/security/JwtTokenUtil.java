@@ -11,9 +11,9 @@ import java.util.Date;
  * @author Nabeel Ahmed
  */
 @Component
-public class JwtUtils {
+public class JwtTokenUtil {
 
-    private Logger logger = LoggerFactory.getLogger(JwtUtils.class);
+    private Logger logger = LoggerFactory.getLogger(JwtTokenUtil.class);
 
     @Value("${app.jwtSecret}")
     private String jwtSecret;
