@@ -35,13 +35,13 @@ public class AuthorQLApi {
 
     /**
      * QL method use to create the author
-     * @param author
+     * @param payload
      * return QLResponse<AuthorResponse>
      * */
     @MutationMapping
-    public GQLResponse<AuthorResponse> createAuthor(@Argument() AuthorRequest author) {
+    public GQLResponse<AuthorResponse> createAuthor(@Argument() AuthorRequest payload) {
         try {
-            return this.authorService.createEntity(author);
+            return this.authorService.createEntity(payload);
         } catch (Exception ex) {
             logger.error("An error occurred while createAuthor[AuthorResponse] ", ExceptionUtil.getRootCause(ex));
             return new GQLResponse(ExceptionUtil.getRootCauseMessage(ex), ReduxUtil.ERROR);
@@ -50,13 +50,13 @@ public class AuthorQLApi {
 
     /**
      * QL method use to update the author
-     * @param author
+     * @param payload
      * return QLResponse<AuthorResponse>
      * */
     @MutationMapping
-    public GQLResponse<AuthorResponse> updateAuthor(@Argument() AuthorRequest author) {
+    public GQLResponse<AuthorResponse> updateAuthor(@Argument() AuthorRequest payload) {
         try {
-            return this.authorService.updateEntity(author);
+            return this.authorService.updateEntity(payload);
         } catch (Exception ex) {
             logger.error("An error occurred while updateAuthor[AuthorResponse] ", ExceptionUtil.getRootCause(ex));
             return new GQLResponse(ExceptionUtil.getRootCauseMessage(ex), ReduxUtil.ERROR);
@@ -112,19 +112,19 @@ public class AuthorQLApi {
      * Rest-API for upload the file.
      * QL not direct support to file upload for upload with ql you need to add extra dependency
      * so avoid this and using rest api
-     * @param requestPayload
+     * @param payload
      * return QLResponse<AuthorListResponse>
      * */
     @RequestMapping(value = "/uploadAuthorImage", method = RequestMethod.POST)
-    public GQLResponse<AuthorResponse> uploadAuthorImage(FileUploadRequest requestPayload) {
+    public GQLResponse<AuthorResponse> uploadAuthorImage(FileUploadRequest payload) {
         try {
-            if (ReduxUtil.isNull(requestPayload.getFile())) {
+            if (ReduxUtil.isNull(payload.getFile())) {
                 return new GQLResponse<>("Author file required.", ReduxUtil.ERROR);
-            } else if (ReduxUtil.isNull(requestPayload.getData())) {
+            } else if (ReduxUtil.isNull(payload.getData())) {
                 return new GQLResponse<>("Author payload required.", ReduxUtil.ERROR);
             }
-            AuthorRequest authorRequest = new Gson().fromJson(requestPayload.getData(), AuthorRequest.class);
-            return this.authorService.uploadAuthorImage(requestPayload.getFile(), authorRequest);
+            AuthorRequest authorRequest = new Gson().fromJson(payload.getData(), AuthorRequest.class);
+            return this.authorService.uploadAuthorImage(payload.getFile(), authorRequest);
         } catch (Exception ex) {
             logger.error("An error occurred while uploadAuthorImage[AuthorResponse] ",
                 ExceptionUtil.getRootCause(ex));

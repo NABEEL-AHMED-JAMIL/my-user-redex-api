@@ -4,26 +4,24 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.gson.Gson;
 import com.user.redex.business.enums.Role;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Nabeel Ahmed
  */
 @JsonIgnoreProperties(ignoreUnknown=true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class AuthorResponse extends BaseEntityResponse {
+public class TokenResponse {
 
     private String firstName;
     private String lastName;
     private String email;
     private String username;
     private Role role;
-    private String biography;
-    private String nationality;
-    private String expertise;
     private String image;
-    private List<BookResponse> books = new ArrayList<>();
+    private String token;
+
+    public TokenResponse() {
+    }
 
     public String getFirstName() {
         return firstName;
@@ -39,6 +37,14 @@ public class AuthorResponse extends BaseEntityResponse {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getUsername() {
@@ -57,30 +63,6 @@ public class AuthorResponse extends BaseEntityResponse {
         this.role = role;
     }
 
-    public String getBiography() {
-        return biography;
-    }
-
-    public void setBiography(String biography) {
-        this.biography = biography;
-    }
-
-    public String getNationality() {
-        return nationality;
-    }
-
-    public void setNationality(String nationality) {
-        this.nationality = nationality;
-    }
-
-    public String getExpertise() {
-        return expertise;
-    }
-
-    public void setExpertise(String expertise) {
-        this.expertise = expertise;
-    }
-
     public String getImage() {
         return image;
     }
@@ -89,20 +71,12 @@ public class AuthorResponse extends BaseEntityResponse {
         this.image = image;
     }
 
-    public String getEmail() {
-        return email;
+    public String getToken() {
+        return token;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public List<BookResponse> getBooks() {
-        return books;
-    }
-
-    public void setBooks(List<BookResponse> books) {
-        this.books = books;
+    public void setToken(String token) {
+        this.token = token;
     }
 
     @Override

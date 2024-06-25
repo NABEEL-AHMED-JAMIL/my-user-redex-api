@@ -38,25 +38,25 @@ public class BookServiceImpl implements BookService {
 
     /**
      * Method use to add the book
-     * @param entity
+     * @param payload
      * @return QLResponse<BookResponse>
      * @throws Exception
      * */
     @Override
-    public GQLResponse<BookResponse> createEntity(BookRequest entity) throws Exception {
-        logger.info("Request For New Book :- " + entity);
+    public GQLResponse<BookResponse> createEntity(BookRequest payload) throws Exception {
+        logger.info("Request For New Book :- " + payload);
         return null;
     }
 
     /**
      * Method use to update the book
-     * @param entity
+     * @param payload
      * @return QLResponse<BookResponse>
      * @throws Exception
      * */
     @Override
-    public GQLResponse<BookResponse> updateEntity(BookRequest entity) throws Exception {
-        logger.info("Request For Update Book :- " + entity);
+    public GQLResponse<BookResponse> updateEntity(BookRequest payload) throws Exception {
+        logger.info("Request For Update Book :- " + payload);
         return null;
     }
 

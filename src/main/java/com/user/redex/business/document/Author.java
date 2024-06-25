@@ -2,6 +2,8 @@ package com.user.redex.business.document;
 
 import com.google.gson.Gson;
 import java.util.List;
+
+import com.user.redex.business.enums.Role;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -18,6 +20,7 @@ public class Author extends BaseEntity {
     @Indexed(unique = true)
     private String username;
     private String password;
+    private Role role;
     private String biography;
     @Indexed
     private String nationality;
@@ -66,6 +69,14 @@ public class Author extends BaseEntity {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public String getBiography() {

@@ -11,17 +11,17 @@ public interface EntityService<R, T> {
 
     /**
      * Create  entity
-     * @param entity
+     * @param payload
      * @return T
      */
-    GQLResponse<T> createEntity(R entity) throws Exception;
+    GQLResponse<T> createEntity(R payload) throws Exception;
 
     /**
      * Update entity
-     * @param entity
+     * @param payload
      * @return T
      */
-    GQLResponse<T> updateEntity(R entity) throws Exception;
+    GQLResponse<T> updateEntity(R payload) throws Exception;
 
     /**
      * Delete entity

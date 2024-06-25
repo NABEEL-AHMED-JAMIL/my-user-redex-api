@@ -6,6 +6,11 @@
 scalar LocalDate
 scalar LocalDateTime
 
+enum Role {
+    NORMAL
+    ADMIN
+}
+
 # Enums
 enum Format {
     HARD_COVER
@@ -66,7 +71,12 @@ interface BaseEntity {
 }
 
 # Response Union
-union DATA = AuthorResponse | AuthorListResponse | BookResponse | BookListResponse
+union DATA =
+    AuthorResponse |
+    AuthorListResponse |
+    BookResponse |
+    BookListResponse |
+    TokenResponse
 
 # Response Type
 type GQLResponse {
@@ -81,6 +91,7 @@ type AuthorResponse implements BaseEntity {
     firstName: String
     lastName: String!
     email: String!
+    role: Role!
     username: String!
     biography: String
     nationality: String!
@@ -121,6 +132,16 @@ type BookListResponse {
     books: [BookResponse]!
 }
 
+type TokenResponse {
+    firstName: String!
+    lastName: String!
+    email: String!
+    username: String!
+    role: Role!
+    image: String!
+    token: String!
+}
+
 # Input Types
 input BookRequest {
     id: ID
@@ -144,6 +165,7 @@ input AuthorRequest {
     lastName: String
     email: String
     password: String
+    role: Role
     username: String
     biography: String
     nationality: String
@@ -151,13 +173,29 @@ input AuthorRequest {
     status: Status
 }
 
+input AuthRequest {
+    username: String!
+    password: String!
+}
+
+input RestPass {
+    username: String!
+    newPassword: String!
+}
+
 # Mutation API
 type Mutation {
-    createAuthor(author: AuthorRequest!): GQLResponse
-    updateAuthor(author: AuthorRequest!): GQLResponse
+    # public api
+    getToken(payload: AuthRequest!): GQLResponse!
+    forgotPassword(username: String!): GQLResponse!
+    restPassword(payload: RestPass!): GQLResponse!
+    # register
+    createAuthor(payload: AuthorRequest!): GQLResponse
+    # secure api
+    updateAuthor(payload: AuthorRequest!): GQLResponse
     deleteAuthor(id: ID!): GQLResponse
-    createBook(book: BookRequest!): GQLResponse
-    updateBook(book: BookRequest!): GQLResponse
+    createBook(payload: BookRequest!): GQLResponse
+    updateBook(payload: BookRequest!): GQLResponse
     deleteBook(id: ID!): GQLResponse
 }
 

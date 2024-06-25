@@ -3,6 +3,8 @@ package com.user.redex.business.dto.request;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.gson.Gson;
+import com.user.redex.business.enums.Role;
+
 import java.util.List;
 
 /**
@@ -17,6 +19,7 @@ public class AuthorRequest extends BaseEntityRequest {
     private String email;
     private String username;
     private String password;
+    private Role role;
     private String biography;
     private String nationality;
     private String expertise;
@@ -64,6 +67,14 @@ public class AuthorRequest extends BaseEntityRequest {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public String getBiography() {

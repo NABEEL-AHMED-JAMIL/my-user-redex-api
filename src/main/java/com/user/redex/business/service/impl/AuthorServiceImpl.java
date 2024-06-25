@@ -48,37 +48,37 @@ public class AuthorServiceImpl implements AuthorService {
     /**
      * Method use to create the author/register
      * Basic validation on ui/form side here double check
-     * @param request
+     * @param payload
      * @return QLResponse<AuthorResponse>
      * @throws Exception
      * */
     @Override
-    public GQLResponse<AuthorResponse> createEntity(AuthorRequest request) throws Exception {
-        logger.info("Request For New Author :- " + request);
-        if (ReduxUtil.isNull(request.getFirstName())) {
+    public GQLResponse<AuthorResponse> createEntity(AuthorRequest payload) throws Exception {
+        logger.info("Request For New Author :- " + payload);
+        if (ReduxUtil.isNull(payload.getFirstName())) {
             return new GQLResponse("Author firstName required.", ReduxUtil.ERROR);
-        } else if (ReduxUtil.isNull(request.getLastName())) {
+        } else if (ReduxUtil.isNull(payload.getLastName())) {
             return new GQLResponse("Author lastName required.", ReduxUtil.ERROR);
-        } else if (ReduxUtil.isNull(request.getEmail())) {
+        } else if (ReduxUtil.isNull(payload.getEmail())) {
             return new GQLResponse("Author email required.", ReduxUtil.ERROR);
-        } else if (ReduxUtil.isNull(request.getUsername())) {
+        } else if (ReduxUtil.isNull(payload.getUsername())) {
             return new GQLResponse("Author username required.", ReduxUtil.ERROR);
-        } else if (ReduxUtil.isNull(request.getPassword())) {
+        } else if (ReduxUtil.isNull(payload.getPassword())) {
             return new GQLResponse("Author password required.", ReduxUtil.ERROR);
-        } else if (ReduxUtil.isNull(request.getBiography())) {
+        } else if (ReduxUtil.isNull(payload.getBiography())) {
             return new GQLResponse("Author biography required.", ReduxUtil.ERROR);
-        } else if (ReduxUtil.isNull(request.getNationality())) {
+        } else if (ReduxUtil.isNull(payload.getNationality())) {
             return new GQLResponse("Author nationality required.", ReduxUtil.ERROR);
-        } else if (ReduxUtil.isNull(request.getExpertise())) {
+        } else if (ReduxUtil.isNull(payload.getExpertise())) {
             return new GQLResponse("Author expertise required.", ReduxUtil.ERROR);
         }
         // db check author email and username
-        if (this.authorRepository.findByEmail(request.getEmail()).isPresent()) {
+        if (this.authorRepository.findByEmail(payload.getEmail()).isPresent()) {
             return new GQLResponse("Author email already exist.", ReduxUtil.ERROR);
-        } else if (this.authorRepository.findByUsername(request.getUsername()).isPresent()) {
+        } else if (this.authorRepository.findByUsername(payload.getUsername()).isPresent()) {
             return new GQLResponse("Author username already exist.", ReduxUtil.ERROR);
         }
-        Author author = this.authorConverter.convertToAuthor(request, new Author());
+        Author author = this.authorConverter.convertToAuthor(payload, new Author());
         author.setStatus(Status.ACTIVE);
         author = this.authorRepository.save(author);
         AuthorResponse authorResponse = this.authorConverter.convertToAuthor(author);
@@ -87,37 +87,37 @@ public class AuthorServiceImpl implements AuthorService {
 
     /**
      * Method use to update the author
-     * @param request
+     * @param payload
      * @return QLResponse<AuthorResponse>
      * @throws Exception
      * */
     @Override
-    public GQLResponse<AuthorResponse> updateEntity(AuthorRequest request) throws Exception {
-        logger.info("Request For Update Author :- " + request);
-         if (ReduxUtil.isNull(request.getEmail())) {
+    public GQLResponse<AuthorResponse> updateEntity(AuthorRequest payload) throws Exception {
+        logger.info("Request For Update Author :- " + payload);
+         if (ReduxUtil.isNull(payload.getEmail())) {
             return new GQLResponse("Author email required.", ReduxUtil.ERROR);
         }
-        Optional<Author> author = this.authorRepository.findByEmailAndStatusNot(request.getEmail(), Status.DELETE);
+        Optional<Author> author = this.authorRepository.findByEmailAndStatusNot(payload.getEmail(), Status.DELETE);
         // db check author email and username
         if (!author.isPresent()) {
             return new GQLResponse("Author email not found.", ReduxUtil.ERROR);
         }
-        if (ReduxUtil.isNull(request.getFirstName())) {
+        if (ReduxUtil.isNull(payload.getFirstName())) {
             return new GQLResponse("Author firstName required.", ReduxUtil.ERROR);
-        } else if (ReduxUtil.isNull(request.getLastName())) {
+        } else if (ReduxUtil.isNull(payload.getLastName())) {
             return new GQLResponse("Author lastName required.", ReduxUtil.ERROR);
-        } else if (ReduxUtil.isNull(request.getBiography())) {
+        } else if (ReduxUtil.isNull(payload.getBiography())) {
             return new GQLResponse("Author biography required.", ReduxUtil.ERROR);
-        } else if (ReduxUtil.isNull(request.getNationality())) {
+        } else if (ReduxUtil.isNull(payload.getNationality())) {
             return new GQLResponse("Author nationality required.", ReduxUtil.ERROR);
-        } else if (ReduxUtil.isNull(request.getExpertise())) {
+        } else if (ReduxUtil.isNull(payload.getExpertise())) {
             return new GQLResponse("Author expertise required.", ReduxUtil.ERROR);
         }
-        author.get().setFirstName(request.getFirstName());
-        author.get().setLastName(request.getLastName());
-        author.get().setBiography(request.getBiography());
-        author.get().setNationality(request.getNationality());
-        author.get().setExpertise(request.getExpertise());
+        author.get().setFirstName(payload.getFirstName());
+        author.get().setLastName(payload.getLastName());
+        author.get().setBiography(payload.getBiography());
+        author.get().setNationality(payload.getNationality());
+        author.get().setExpertise(payload.getExpertise());
         this.authorRepository.save(author.get());
         AuthorResponse authorResponse = this.authorConverter.convertToAuthor(author.get());
         return new GQLResponse("Author update successfully.", ReduxUtil.SUCCESS, authorResponse);
@@ -179,16 +179,16 @@ public class AuthorServiceImpl implements AuthorService {
     /**
      * Method use to upload the author image
      * @param file
-     * @param request
+     * @param payload
      * @return AuthorResponse
      * */
     @Override
-    public GQLResponse<AuthorResponse> uploadAuthorImage(MultipartFile file, AuthorRequest request) throws Exception {
-        logger.info("Request For upload author image :- " + request);
-        if (ReduxUtil.isNull(request.getEmail())) {
+    public GQLResponse<AuthorResponse> uploadAuthorImage(MultipartFile file, AuthorRequest payload) throws Exception {
+        logger.info("Request For upload author image :- " + payload);
+        if (ReduxUtil.isNull(payload.getEmail())) {
             return new GQLResponse("Author email required.", ReduxUtil.ERROR);
         }
-        Optional<Author> author = this.authorRepository.findByEmailAndStatusNot(request.getEmail(), Status.DELETE);
+        Optional<Author> author = this.authorRepository.findByEmailAndStatusNot(payload.getEmail(), Status.DELETE);
         if (!author.isPresent()) {
             return new GQLResponse("Author email not found.", ReduxUtil.ERROR);
         }

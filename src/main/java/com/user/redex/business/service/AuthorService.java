@@ -10,6 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
  */
 public interface AuthorService extends EntityService<AuthorRequest, AuthorResponse> {
 
-    GQLResponse<AuthorResponse> uploadAuthorImage(MultipartFile file, AuthorRequest entity) throws Exception;
+    GQLResponse<AuthorResponse> uploadAuthorImage(MultipartFile file, AuthorRequest payload) throws Exception;
 
 }
