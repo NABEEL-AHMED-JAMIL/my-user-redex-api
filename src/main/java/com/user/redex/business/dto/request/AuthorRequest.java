@@ -22,7 +22,6 @@ public class AuthorRequest extends BaseEntityRequest {
     private String biography;
     private String nationality;
     private String expertise;
-    private List<BookRequest> books;
 
     public AuthorRequest() {
     }
@@ -97,14 +96,6 @@ public class AuthorRequest extends BaseEntityRequest {
 
     public void setExpertise(String expertise) {
         this.expertise = expertise;
-    }
-
-    public List<BookRequest> getBooks() {
-        return books;
-    }
-
-    public void setBooks(List<BookRequest> bookRequests) {
-        this.books = bookRequests;
     }
 
     @Override

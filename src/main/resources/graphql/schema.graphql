@@ -1,8 +1,4 @@
-# Doc & Github Ref [as per the doc schema store with graphqls not with graphql]
-# Postman use the graphql not the graphqls
-# https://graphql.org/learn/schema/#object-types-and-fields [use for create the graphql]
-# https://github.com/Amit-Chavda/todo-app-grapql [use for graphql custom scalar in java]
-# https://github.com/rrohitramsen/ems [use for ems]
+# for backend service
 scalar LocalDate
 scalar LocalDateTime
 
@@ -39,19 +35,19 @@ enum Status {
 
 # Custom Enum Types
 type GFormat {
-    code: Int!
+    code: String!
     name: String!
     value: Format!
 }
 
 type GLanguage {
-    code: Int!
+    code: String!
     name: String!
     value: Language!
 }
 
 type GCategory {
-    code: Int!
+    code: String!
     name: String!
     value: Category!
 }
@@ -97,7 +93,6 @@ type AuthorResponse implements BaseEntity {
     nationality: String!
     expertise: String
     image: String
-    books: [BookResponse]!
     createdAt: LocalDateTime!
     updatedAt: LocalDateTime!
     status: GStatus!
@@ -114,13 +109,13 @@ type BookResponse implements BaseEntity {
     title: String!
     price: Float!
     publisher: String!
-    publication: LocalDate!
+    publication: LocalDate
     language: GLanguage!
     category: GCategory!
     format: GFormat!
     description: String!
-    coverImg: String!
-    bookUrl: String!
+    coverImg: String
+    bookUrl: String
     note: String
     author: AuthorResponse!
     createdAt: LocalDateTime!
@@ -149,13 +144,11 @@ input BookRequest {
     title: String
     price: Float
     publisher: String
-    publication: LocalDate
     language: Language
     category: Category
     format: Format
     description: String
     note: String
-    author: AuthorRequest
     status: Status
 }
 

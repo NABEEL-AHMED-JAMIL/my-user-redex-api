@@ -3,7 +3,6 @@ package com.user.redex.business.dto.response;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.gson.Gson;
-import com.user.redex.business.enums.Status;
 import java.time.LocalDateTime;
 
 /**
@@ -16,7 +15,7 @@ public class BaseEntityResponse {
     private String id;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private GEnum<Status> status;
+    private GEnum<Integer> status;
 
     public BaseEntityResponse() {
     }
@@ -45,11 +44,11 @@ public class BaseEntityResponse {
         this.updatedAt = updatedAt;
     }
 
-    public GEnum<Status> getStatus() {
+    public GEnum<Integer> getStatus() {
         return status;
     }
 
-    public void setStatus(GEnum<Status> status) {
+    public void setStatus(GEnum<Integer> status) {
         this.status = status;
     }
 

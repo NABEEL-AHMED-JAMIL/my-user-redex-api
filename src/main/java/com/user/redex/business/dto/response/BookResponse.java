@@ -20,9 +20,9 @@ public class BookResponse extends BaseEntityResponse {
     private Double price;
     private String publisher;
     private LocalDate publication;
-    private GEnum<Language> language;
-    private GEnum<Category> category;
-    private GEnum<Format> format;
+    private GEnum<String> language;
+    private GEnum<String> category;
+    private GEnum<String> format;
     private String description;
     private String coverImg;
     private String bookUrl;
@@ -72,27 +72,27 @@ public class BookResponse extends BaseEntityResponse {
         this.publication = publication;
     }
 
-    public GEnum<Language> getLanguage() {
+    public GEnum<String> getLanguage() {
         return language;
     }
 
-    public void setLanguage(GEnum<Language> language) {
+    public void setLanguage(GEnum<String> language) {
         this.language = language;
     }
 
-    public GEnum<Category> getCategory() {
+    public GEnum<String> getCategory() {
         return category;
     }
 
-    public void setCategory(GEnum<Category> category) {
+    public void setCategory(GEnum<String> category) {
         this.category = category;
     }
 
-    public GEnum<Format> getFormat() {
+    public GEnum<String> getFormat() {
         return format;
     }
 
-    public void setFormat(GEnum<Format> format) {
+    public void setFormat(GEnum<String> format) {
         this.format = format;
     }
 

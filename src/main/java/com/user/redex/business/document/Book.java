@@ -86,11 +86,11 @@ public class Book extends BaseEntity {
         this.language = language;
     }
 
-    public com.user.redex.business.enums.Category getCategory() {
+    public Category getCategory() {
         return Category;
     }
 
-    public void setCategory(com.user.redex.business.enums.Category category) {
+    public void setCategory(Category category) {
         Category = category;
     }
 

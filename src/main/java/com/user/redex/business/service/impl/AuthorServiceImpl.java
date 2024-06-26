@@ -114,7 +114,7 @@ public class AuthorServiceImpl implements AuthorService {
         Optional<Author> author = this.authorRepository.findByEmailAndStatusNot(payload.getEmail(), Status.DELETE);
         // db check author email and username
         if (!author.isPresent()) {
-            return new GQLResponse("Author email not found.", ReduxUtil.ERROR);
+            return new GQLResponse("Author not found.", ReduxUtil.ERROR);
         }
         if (ReduxUtil.isNull(payload.getFirstName())) {
             return new GQLResponse("Author firstName required.", ReduxUtil.ERROR);

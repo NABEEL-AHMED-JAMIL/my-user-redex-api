@@ -29,7 +29,6 @@ public class BookConverter {
         book.setIsbn(bookRequest.getIsbn());
         book.setPrice(bookRequest.getPrice());
         book.setPublisher(bookRequest.getPublisher());
-        book.setPublication(bookRequest.getPublication());
         book.setLanguage(bookRequest.getLanguage());
         book.setCategory(bookRequest.getCategory());
         book.setFormat(bookRequest.getFormat());

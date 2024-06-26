@@ -30,28 +30,43 @@ public class BookQLApi {
     @Autowired
     private BookService bookService;
 
+    /**
+     * Method use to create the book for login author
+     * @param payload
+     * @return GQLResponse<BookResponse>
+     * */
     @MutationMapping
     @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-    public GQLResponse<BookResponse> createBook(@Argument() BookRequest book) {
+    public GQLResponse<BookResponse> createBook(@Argument() BookRequest payload) {
         try {
-            return this.bookService.createEntity(book);
+            return this.bookService.createEntity(payload);
         } catch (Exception ex) {
             logger.error("An error occurred while createBook[BookResponse] ", ExceptionUtil.getRootCause(ex));
             return new GQLResponse(ExceptionUtil.getRootCauseMessage(ex), ReduxUtil.ERROR);
         }
     }
 
+    /**
+     * Method use to update the book for login author
+     * @param payload
+     * @return GQLResponse<BookResponse>
+     * */
     @MutationMapping
     @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-    public GQLResponse<BookResponse> updateBook(@Argument() BookRequest book) {
+    public GQLResponse<BookResponse> updateBook(@Argument() BookRequest payload) {
         try {
-            return this.bookService.updateEntity(book);
+            return this.bookService.updateEntity(payload);
         } catch (Exception ex) {
             logger.error("An error occurred while updateBook[BookResponse] ", ExceptionUtil.getRootCause(ex));
             return new GQLResponse(ExceptionUtil.getRootCauseMessage(ex), ReduxUtil.ERROR);
         }
     }
 
+    /**
+     * Method use to delete the book for login author
+     * @param id
+     * @return GQLResponse<BookResponse>
+     * */
     @MutationMapping
     @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     public GQLResponse<BookResponse> deleteBook(@Argument(value = "id") String id) {
@@ -63,6 +78,11 @@ public class BookQLApi {
         }
     }
 
+    /**
+     * Method use to get the book for login author
+     * @param id
+     * @return GQLResponse<BookResponse>
+     * */
     @QueryMapping
     @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     public GQLResponse<BookResponse> getBook(@Argument(value = "id") String id) {
@@ -74,6 +94,10 @@ public class BookQLApi {
         }
     }
 
+    /**
+     * Method use to get all books [public api also use same api]
+     * @return GQLResponse<BookListResponse>
+     * */
     @QueryMapping
     @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     public GQLResponse<BookListResponse> getAllBooks() {

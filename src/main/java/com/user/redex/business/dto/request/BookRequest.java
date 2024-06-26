@@ -19,13 +19,11 @@ public class BookRequest extends BaseEntityRequest {
     private String title;
     private Double price;
     private String publisher;
-    private LocalDate publication;
     private Language language;
     private Category Category;
     private Format format;
     private String description;
     private String note;
-    private AuthorRequest author;
 
     public BookRequest() {
     }
@@ -60,14 +58,6 @@ public class BookRequest extends BaseEntityRequest {
 
     public void setPublisher(String publisher) {
         this.publisher = publisher;
-    }
-
-    public LocalDate getPublication() {
-        return publication;
-    }
-
-    public void setPublication(LocalDate publication) {
-        this.publication = publication;
     }
 
     public Language getLanguage() {
@@ -108,14 +98,6 @@ public class BookRequest extends BaseEntityRequest {
 
     public void setNote(String note) {
         this.note = note;
-    }
-
-    public AuthorRequest getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(AuthorRequest author) {
-        this.author = author;
     }
 
     @Override
