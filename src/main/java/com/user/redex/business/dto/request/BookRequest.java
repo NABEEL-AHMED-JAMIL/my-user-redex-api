@@ -24,8 +24,6 @@ public class BookRequest extends BaseEntityRequest {
     private Category Category;
     private Format format;
     private String description;
-    private String coverImg;
-    private String bookUrl;
     private String note;
     private AuthorRequest author;
 
@@ -102,22 +100,6 @@ public class BookRequest extends BaseEntityRequest {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getCoverImg() {
-        return coverImg;
-    }
-
-    public void setCoverImg(String coverImg) {
-        this.coverImg = coverImg;
-    }
-
-    public String getBookUrl() {
-        return bookUrl;
-    }
-
-    public void setBookUrl(String bookUrl) {
-        this.bookUrl = bookUrl;
     }
 
     public String getNote() {

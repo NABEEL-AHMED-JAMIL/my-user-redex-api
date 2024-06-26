@@ -18,6 +18,11 @@ public class LocalDateScalar implements Coercing<LocalDate, String> {
     private static final String DATE_PATTERN = "dd-MMM-yyyy";
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern(DATE_PATTERN);
 
+    /**
+     * Serialize LocalDate to String
+     * @param dataFetcherResult
+     * @return String
+     * */
     @Override
     public String serialize(Object dataFetcherResult) throws CoercingSerializeException {
         if (dataFetcherResult instanceof LocalDate) {
@@ -27,6 +32,11 @@ public class LocalDateScalar implements Coercing<LocalDate, String> {
         throw new CoercingSerializeException("Invalid LocalDate value: " + dataFetcherResult);
     }
 
+    /**
+     * Parse value from String to LocalDate
+     * @param input
+     * @return LocalDate
+     * */
     @Override
     public LocalDate parseValue(Object input) throws CoercingParseValueException {
         if (input instanceof String) {
@@ -40,6 +50,11 @@ public class LocalDateScalar implements Coercing<LocalDate, String> {
         throw new CoercingParseValueException("Invalid LocalDate value: " + input);
     }
 
+    /**
+     * Parse value from StringValue to LocalDate
+     * @param input
+     * @return LocalDate
+     * */
     @Override
     public LocalDate parseLiteral(Object input) throws CoercingParseLiteralException {
         if (input instanceof StringValue) {

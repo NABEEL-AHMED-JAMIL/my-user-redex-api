@@ -28,7 +28,7 @@ spring:
       path: /graphiql
     schema:
       locations=classpath:graphql/:
-  #==============================
+#==============================
 # ==== Email detail ===========
 # =============================
   mail:
@@ -50,6 +50,8 @@ spring:
 #==============================
 # ==== JWT Token detail =======
 # =============================
+admin:
+  email: ${ADMIN_EMAIL}
 app:
   jwtSecret: ${JWT_SECRET}
   jwtExpirationMs: 86400000

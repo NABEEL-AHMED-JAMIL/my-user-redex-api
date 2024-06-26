@@ -10,7 +10,11 @@ import com.user.redex.business.dto.response.AuthorResponse;
 import com.user.redex.business.enums.Status;
 import com.user.redex.business.repository.AuthorRepository;
 import com.user.redex.business.service.AuthorService;
+import com.user.redex.manager.emailer.EmailMessageRequest;
+import com.user.redex.manager.emailer.EmailMessagesFactory;
 import com.user.redex.manager.remote.RemoteFileExchange;
+import com.user.redex.manager.velocity.TemplateType;
+import com.user.redex.util.ExceptionUtil;
 import com.user.redex.util.ReduxUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,10 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -35,6 +36,8 @@ public class AuthorServiceImpl implements AuthorService {
     private Logger logger = LoggerFactory.getLogger(AuthorServiceImpl.class);
 
     @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
     private AuthorConverter authorConverter;
     @Autowired
     private BookConverter bookConverter;
@@ -43,7 +46,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Autowired
     private RemoteFileExchange remoteFileExchange;
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private EmailMessagesFactory emailMessagesFactory;
 
     public AuthorServiceImpl() {
     }
@@ -89,6 +92,7 @@ public class AuthorServiceImpl implements AuthorService {
         author.setStatus(Status.ACTIVE);
         author = this.authorRepository.save(author);
         AuthorResponse authorResponse = this.authorConverter.convertToAuthor(author);
+        this.sendRegisterEmail(authorResponse);
         return new GQLResponse("Author save successfully.", ReduxUtil.SUCCESS, authorResponse);
     }
 
@@ -229,4 +233,25 @@ public class AuthorServiceImpl implements AuthorService {
         }
         return authorResponse;
     }
+
+    /**
+     * Method use to send register email
+     * @param authorResponse
+     * */
+    private void sendRegisterEmail(AuthorResponse authorResponse) {
+        Thread registerEmailThread = new Thread(() -> {
+            try {
+                EmailMessageRequest emailMessageRequest = new EmailMessageRequest();
+                emailMessageRequest.setTemplateType(TemplateType.REGISTER_PATH);
+                emailMessageRequest.setRecipients(authorResponse.getEmail());
+                emailMessageRequest.setSubject("Author Registration Successful");
+                emailMessageRequest.getBodyMap().put("author", authorResponse);
+                logger.info(emailMessagesFactory.sendSimpleMail(emailMessageRequest));
+            } catch (Exception ex) {
+                 logger.error("Error while sending register email :- " + ExceptionUtil.getRootCauseMessage(ex));
+            }
+        });
+        registerEmailThread.start();
+    }
+
 }

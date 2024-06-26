@@ -65,12 +65,14 @@
         </div>
         <div class="content">
             <h1>Welcome to QNL!</h1>
-            <p>Dear ${fullName},</p>
-            <p>Congratulations! Your registration as an author on <b>QNL</b> has been successful. We are thrilled to have you on board and can't wait to see the amazing content you will create.</p>
-            <p>You can now log in to your account and start contributing to our community. If you have any questions or need assistance, please do not hesitate to reach out to our support team.</p>
+            <p>Dear $object.get("author").firstName $object.get("author").lastName,</p>
+            <p>Congratulations! Your registration as an author on <b>QNL</b> has been successful.
+                We are thrilled to have you on board and can't wait to see the amazing content you will create.</p>
+            <p>You can now log in to your account and start contributing to our community.
+                If you have any questions or need assistance, please do not hesitate to reach out to our support team.</p>
             <p>Best regards,</p>
             <p>The QNL Team</p>
-            <a href="[Login URL]" class="button">Log In</a>
+            <a href="http://localhost:4200/login" class="button">Log In</a>
         </div>
         <div class="footer">
             <p>&copy; 2024 [NABEEL-AHMED-JAMIL]. All rights open source.</p>

@@ -22,7 +22,6 @@ public class AuthorRequest extends BaseEntityRequest {
     private String biography;
     private String nationality;
     private String expertise;
-    private String image;
     private List<BookRequest> books;
 
     public AuthorRequest() {
@@ -98,14 +97,6 @@ public class AuthorRequest extends BaseEntityRequest {
 
     public void setExpertise(String expertise) {
         this.expertise = expertise;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
     }
 
     public List<BookRequest> getBooks() {
