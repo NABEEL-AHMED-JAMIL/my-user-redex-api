@@ -14,6 +14,6 @@ public interface AuthService {
 
     public GQLResponse<?> forgotPassword(String username) throws Exception;
 
-    public GQLResponse<?> restPassword(RestPasswordRequest payload) throws Exception;
+    public GQLResponse<?> resetPassword(RestPasswordRequest payload) throws Exception;
 
 }

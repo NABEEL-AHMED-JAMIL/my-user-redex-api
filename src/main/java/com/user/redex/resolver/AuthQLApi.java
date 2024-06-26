@@ -67,9 +67,9 @@ public class AuthQLApi {
      * */
     @MutationMapping
     @PreAuthorize("isAnonymous()")
-    public GQLResponse<?> restPassword(@Argument() RestPasswordRequest payload) {
+    public GQLResponse<?> resetPassword(@Argument() RestPasswordRequest payload) {
         try {
-            return this.authService.restPassword(payload);
+            return this.authService.resetPassword(payload);
         } catch (Exception ex) {
             logger.error("An error occurred while restPassword[?] ", ExceptionUtil.getRootCause(ex));
             return new GQLResponse(ExceptionUtil.getRootCauseMessage(ex), ReduxUtil.ERROR);

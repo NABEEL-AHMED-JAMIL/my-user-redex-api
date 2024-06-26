@@ -1,5 +1,14 @@
 package com.user.redex.business.service.impl;
 
+import com.user.redex.business.converter.AuthorConverter;
+import com.user.redex.business.document.Author;
+import com.user.redex.business.dto.response.AuthorResponse;
+import com.user.redex.business.enums.Status;
+import com.user.redex.business.repository.AuthorRepository;
+import com.user.redex.manager.emailer.EmailMessageRequest;
+import com.user.redex.manager.emailer.EmailMessagesFactory;
+import com.user.redex.manager.velocity.TemplateType;
+import com.user.redex.util.ExceptionUtil;
 import com.user.redex.util.ReduxUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +25,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import java.util.Optional;
 
 /**
  * @author Nabeel Ahmed
@@ -32,6 +43,14 @@ public class AuthServiceImpl implements AuthService {
     private JwtTokenUtil jwtTokenUtil;
     @Autowired
     private UserDetailsService userDetailsService;
+    @Autowired
+    private AuthorConverter authorConverter;
+    @Autowired
+    private AuthorRepository authorRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private EmailMessagesFactory emailMessagesFactory;
 
     public AuthServiceImpl() {
     }
@@ -62,7 +81,20 @@ public class AuthServiceImpl implements AuthService {
      * */
     @Override
     public GQLResponse<?> forgotPassword(String username) throws Exception {
-        return null;
+        logger.info("Request forgotPassword :- " + username);
+        if (ReduxUtil.isNull(username)) {
+            return new GQLResponse("Username missing.", ReduxUtil.ERROR);
+        }
+        Optional<Author> author = this.authorRepository.findByUsernameAndStatus(username, Status.ACTIVE);
+        if (author.isPresent()) {
+            Thread registerForgotThread = new Thread(() -> {
+                AuthorResponse authorResponse = this.authorConverter.convertToAuthor(author.get());
+                this.sendForgotEmail(authorResponse);
+            });
+            registerForgotThread.start();
+            return new GQLResponse("Email send successfully.", ReduxUtil.SUCCESS);
+        }
+        return new GQLResponse("Author not exist.", ReduxUtil.ERROR);
     }
 
     /**
@@ -71,8 +103,25 @@ public class AuthServiceImpl implements AuthService {
      * @return GQLResponse<?>
      * */
     @Override
-    public GQLResponse<?> restPassword(RestPasswordRequest payload) throws Exception {
-        return null;
+    public GQLResponse<?> resetPassword(RestPasswordRequest payload) throws Exception {
+        logger.info("Request resetPassword :- " + payload);
+        if (ReduxUtil.isNull(payload.getUsername())) {
+            return new GQLResponse("Username missing.", ReduxUtil.ERROR);
+        } else if (ReduxUtil.isNull(payload.getNewPassword())) {
+            return new GQLResponse("New password missing.", ReduxUtil.ERROR);
+        }
+        Optional<Author> author = this.authorRepository.findByUsernameAndStatus(payload.getUsername(), Status.ACTIVE);
+        if (!author.isPresent()) {
+            return new GQLResponse("Author not exist.", ReduxUtil.ERROR);
+        }
+        author.get().setPassword(this.passwordEncoder.encode(payload.getNewPassword()));
+        this.authorRepository.save(author.get());
+        Thread passwordRestThread = new Thread(() -> {
+            AuthorResponse authorResponse = this.authorConverter.convertToAuthor(author.get());
+            this.sendPasswordRestEmail(authorResponse);
+        });
+        passwordRestThread.start();
+        return new GQLResponse("Email send successfully.", ReduxUtil.SUCCESS);
     }
 
     /**
@@ -88,6 +137,40 @@ public class AuthServiceImpl implements AuthService {
         tokenResponse.setEmail(userDetails.getEmail());
         tokenResponse.setRole(userDetails.getRole());
         return tokenResponse;
+    }
+
+    /**
+     * Method use to send forgot password email
+     * @param authorResponse
+     * */
+    private void sendForgotEmail(AuthorResponse authorResponse) {
+        try {
+            EmailMessageRequest emailMessageRequest = new EmailMessageRequest();
+            emailMessageRequest.setTemplateType(TemplateType.FORGOT_PASS_PATH);
+            emailMessageRequest.setRecipients(authorResponse.getEmail());
+            emailMessageRequest.setSubject("Password Reset Request");
+            emailMessageRequest.getBodyMap().put("author", authorResponse);
+            logger.info(emailMessagesFactory.sendSimpleMail(emailMessageRequest));
+        } catch (Exception ex) {
+            logger.error("Error while sending register email :- " + ExceptionUtil.getRootCauseMessage(ex));
+        }
+    }
+
+    /**
+     * Method use to send forgot password email
+     * @param authorResponse
+     * */
+    private void sendPasswordRestEmail(AuthorResponse authorResponse) {
+        try {
+            EmailMessageRequest emailMessageRequest = new EmailMessageRequest();
+            emailMessageRequest.setTemplateType(TemplateType.PASSWORD_RESET_PATH);
+            emailMessageRequest.setRecipients(authorResponse.getEmail());
+            emailMessageRequest.setSubject("Password Successfully Reset");
+            emailMessageRequest.getBodyMap().put("author", authorResponse);
+            logger.info(emailMessagesFactory.sendSimpleMail(emailMessageRequest));
+        } catch (Exception ex) {
+            logger.error("Error while sending register email :- " + ExceptionUtil.getRootCauseMessage(ex));
+        }
     }
 
 }

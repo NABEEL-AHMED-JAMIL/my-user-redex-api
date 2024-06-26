@@ -138,7 +138,7 @@ type TokenResponse {
     email: String!
     username: String!
     role: Role!
-    image: String!
+    image: String
     token: String!
 }
 
@@ -188,7 +188,7 @@ type Mutation {
     # public api
     getToken(payload: AuthRequest!): GQLResponse!
     forgotPassword(username: String!): GQLResponse!
-    restPassword(payload: RestPass!): GQLResponse!
+    resetPassword(payload: RestPass!): GQLResponse!
     # register
     createAuthor(payload: AuthorRequest!): GQLResponse
     # secure api
@@ -201,7 +201,7 @@ type Mutation {
 
 # Query API
 type Query {
-    # secure GQL only access after login
+    # secure api
     getAuthor(id: ID!): GQLResponse
     getAllAuthors: GQLResponse
     getBook(id: ID!): GQLResponse

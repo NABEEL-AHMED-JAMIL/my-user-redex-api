@@ -92,7 +92,10 @@ public class AuthorServiceImpl implements AuthorService {
         author.setStatus(Status.ACTIVE);
         author = this.authorRepository.save(author);
         AuthorResponse authorResponse = this.authorConverter.convertToAuthor(author);
-        this.sendRegisterEmail(authorResponse);
+        Thread registerEmailThread = new Thread(() -> {
+            this.sendRegisterEmail(authorResponse);
+        });
+        registerEmailThread.start();
         return new GQLResponse("Author save successfully.", ReduxUtil.SUCCESS, authorResponse);
     }
 
@@ -220,7 +223,7 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     /**
-     * Method use to get the author
+     * Method use to get the author response
      * @param author
      * @return AuthorResponse
      * */
@@ -239,19 +242,16 @@ public class AuthorServiceImpl implements AuthorService {
      * @param authorResponse
      * */
     private void sendRegisterEmail(AuthorResponse authorResponse) {
-        Thread registerEmailThread = new Thread(() -> {
-            try {
-                EmailMessageRequest emailMessageRequest = new EmailMessageRequest();
-                emailMessageRequest.setTemplateType(TemplateType.REGISTER_PATH);
-                emailMessageRequest.setRecipients(authorResponse.getEmail());
-                emailMessageRequest.setSubject("Author Registration Successful");
-                emailMessageRequest.getBodyMap().put("author", authorResponse);
-                logger.info(emailMessagesFactory.sendSimpleMail(emailMessageRequest));
-            } catch (Exception ex) {
-                 logger.error("Error while sending register email :- " + ExceptionUtil.getRootCauseMessage(ex));
-            }
-        });
-        registerEmailThread.start();
+        try {
+            EmailMessageRequest emailMessageRequest = new EmailMessageRequest();
+            emailMessageRequest.setTemplateType(TemplateType.REGISTER_PATH);
+            emailMessageRequest.setRecipients(authorResponse.getEmail());
+            emailMessageRequest.setSubject("Author Registration Successful");
+            emailMessageRequest.getBodyMap().put("author", authorResponse);
+            logger.info(emailMessagesFactory.sendSimpleMail(emailMessageRequest));
+        } catch (Exception ex) {
+            logger.error("Error while sending register email :- " + ExceptionUtil.getRootCauseMessage(ex));
+        }
     }
 
 }

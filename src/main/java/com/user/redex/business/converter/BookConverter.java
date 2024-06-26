@@ -34,8 +34,6 @@ public class BookConverter {
         book.setCategory(bookRequest.getCategory());
         book.setFormat(bookRequest.getFormat());
         book.setDescription(bookRequest.getDescription());
-        book.setCoverImg(bookRequest.getCoverImg());
-        book.setBookUrl(bookRequest.getBookUrl());
         book.setNote(bookRequest.getNote());
         return book;
     }

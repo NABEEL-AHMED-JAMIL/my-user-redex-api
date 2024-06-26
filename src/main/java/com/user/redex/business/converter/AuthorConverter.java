@@ -32,7 +32,6 @@ public class AuthorConverter {
         author.setBiography(authorRequest.getBiography());
         author.setNationality(authorRequest.getNationality());
         author.setExpertise(authorRequest.getExpertise());
-        author.setImage(authorRequest.getImage());
         return author;
     }
 

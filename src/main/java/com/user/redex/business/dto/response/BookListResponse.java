@@ -17,6 +17,10 @@ public class BookListResponse {
     public BookListResponse() {
     }
 
+    public BookListResponse(List<BookResponse> books) {
+        this.books = books;
+    }
+
     public List<BookResponse> getBooks() {
         return books;
     }

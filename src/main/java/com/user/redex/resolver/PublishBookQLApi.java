@@ -8,6 +8,7 @@ import com.user.redex.util.ExceptionUtil;
 import com.user.redex.util.ReduxUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +22,7 @@ public class PublishBookQLApi {
 
     private Logger logger = LoggerFactory.getLogger(PublishBookQLApi.class);
 
+    @Autowired
     private PublishBookService publishBookService;
 
     /**
