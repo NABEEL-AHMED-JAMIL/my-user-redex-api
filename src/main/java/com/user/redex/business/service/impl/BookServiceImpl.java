@@ -99,14 +99,6 @@ public class BookServiceImpl implements BookService {
     @Override
     public GQLResponse<BookResponse> updateEntity(BookRequest payload) throws Exception {
         logger.info("Request For Update Book :- " + payload);
-        // get the user detail from authentication
-        UserDetailsExt userDetails = (UserDetailsExt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Optional<Author> author = this.authorRepository.findByUsernameAndStatus(userDetails.getUsername(), Status.ACTIVE);
-        if (!author.isPresent()) {
-            return new GQLResponse("Author not found.", ReduxUtil.ERROR);
-        } else if (ReduxUtil.isNull(payload.getIsbn())) {
-            return new GQLResponse("Book isbn required.", ReduxUtil.ERROR);
-        }
         Optional<Book> book = this.bookRepository.findByIsbn(payload.getIsbn());
         if (!book.isPresent()) {
             return new GQLResponse("Book not found with isbn.", ReduxUtil.ERROR);
@@ -132,7 +124,6 @@ public class BookServiceImpl implements BookService {
         if (!ReduxUtil.isNull(payload.getStatus())) {
             book.get().setStatus(payload.getStatus());
         }
-        book.get().setAuthor(author.get());
         this.bookRepository.save(book.get());
         BookResponse bookResponse = this.bookConverter.convertToBook(book.get());
         return new GQLResponse("Book detail update successfully.", ReduxUtil.SUCCESS, bookResponse);
@@ -147,13 +138,6 @@ public class BookServiceImpl implements BookService {
     @Override
     public GQLResponse<BookResponse> deleteEntity(String id) throws Exception {
         logger.info("Request For Delete Book BY ID :- " + id);
-        // get the user detail from authentication
-        UserDetailsExt userDetails = (UserDetailsExt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        // check if author active | inactive and exist in db
-        Optional<Author> author = this.authorRepository.findByUsernameAndStatus(userDetails.getUsername(), Status.ACTIVE);
-        if (!author.isPresent()) {
-            return new GQLResponse("Author not found.", ReduxUtil.ERROR);
-        }
         Optional<Book> book = this.bookRepository.findByIdAndStatusNot(id, Status.DELETE);
         if (!book.isPresent()) {
             return new GQLResponse("Book not found.", ReduxUtil.ERROR);
@@ -172,14 +156,6 @@ public class BookServiceImpl implements BookService {
     @Override
     public GQLResponse<BookResponse> getEntity(String id) throws Exception {
         logger.info("Request For Get Book BY ID :- " + id);
-        // get the user detail from authentication
-        UserDetailsExt userDetails = (UserDetailsExt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        // check if author active | inactive and exist in db
-        Optional<Author> author = this.authorRepository.findByUsernameAndStatus(userDetails.getUsername(), Status.ACTIVE);
-        if (!author.isPresent()) {
-            return new GQLResponse("Author not found.", ReduxUtil.ERROR);
-        }
-        // check if author active | inactive and exist in db
         Optional<Book> book = this.bookRepository.findByIdAndStatusNot(id, Status.DELETE);
         if (!book.isPresent()) {
             return new GQLResponse("Book not found.", ReduxUtil.ERROR);
