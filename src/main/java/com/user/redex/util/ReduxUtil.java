@@ -10,7 +10,7 @@ public class ReduxUtil {
     public final static String SUCCESS = "SUCCESS";
 
     public static boolean isNull(Object payload) {
-        return payload == null || payload == "" ? true : false;
+        return payload == null || payload == "";
     }
 
     public static boolean isNull(String str) {
