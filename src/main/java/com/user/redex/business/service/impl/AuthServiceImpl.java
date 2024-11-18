@@ -62,7 +62,7 @@ public class AuthServiceImpl implements AuthService {
      * */
     @Override
     public GQLResponse<TokenResponse> getToken(AuthRequest payload) throws Exception {
-        logger.info("Request For Token :- " + payload);
+        logger.info("Request For Token :- {}", payload);
         Authentication authentication = this.authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(payload.getUsername(), payload.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -71,7 +71,7 @@ public class AuthServiceImpl implements AuthService {
         TokenResponse tokenResponse = getTokenResponse(userDetailsExt);
         String token = this.jwtTokenUtil.generateTokenFromUsername(tokenResponse.getUsername());
         tokenResponse.setToken(token);
-        return new GQLResponse("Author token fetch successfully.", ReduxUtil.SUCCESS, tokenResponse);
+        return new GQLResponse<>("Author token fetch successfully.", ReduxUtil.SUCCESS, tokenResponse);
     }
 
     /**
@@ -81,9 +81,9 @@ public class AuthServiceImpl implements AuthService {
      * */
     @Override
     public GQLResponse<?> forgotPassword(String username) throws Exception {
-        logger.info("Request forgotPassword :- " + username);
+        logger.info("Request forgotPassword :- {}", username);
         if (ReduxUtil.isNull(username)) {
-            return new GQLResponse("Username missing.", ReduxUtil.ERROR);
+            return new GQLResponse<>("Username missing.", ReduxUtil.ERROR);
         }
         Optional<Author> author = this.authorRepository.findByUsernameAndStatus(username, Status.ACTIVE);
         if (author.isPresent()) {
@@ -92,9 +92,9 @@ public class AuthServiceImpl implements AuthService {
                 this.sendForgotEmail(authorResponse);
             });
             registerForgotThread.start();
-            return new GQLResponse("Email send successfully.", ReduxUtil.SUCCESS);
+            return new GQLResponse<>("Email send successfully.", ReduxUtil.SUCCESS);
         }
-        return new GQLResponse("Author not exist.", ReduxUtil.ERROR);
+        return new GQLResponse<>("Author not exist.", ReduxUtil.ERROR);
     }
 
     /**
@@ -104,15 +104,15 @@ public class AuthServiceImpl implements AuthService {
      * */
     @Override
     public GQLResponse<?> resetPassword(RestPasswordRequest payload) throws Exception {
-        logger.info("Request resetPassword :- " + payload);
+        logger.info("Request resetPassword :- {}", payload);
         if (ReduxUtil.isNull(payload.getUsername())) {
-            return new GQLResponse("Username missing.", ReduxUtil.ERROR);
+            return new GQLResponse<>("Username missing.", ReduxUtil.ERROR);
         } else if (ReduxUtil.isNull(payload.getNewPassword())) {
-            return new GQLResponse("New password missing.", ReduxUtil.ERROR);
+            return new GQLResponse<>("New password missing.", ReduxUtil.ERROR);
         }
         Optional<Author> author = this.authorRepository.findByUsernameAndStatus(payload.getUsername(), Status.ACTIVE);
         if (!author.isPresent()) {
-            return new GQLResponse("Author not exist.", ReduxUtil.ERROR);
+            return new GQLResponse<>("Author not exist.", ReduxUtil.ERROR);
         }
         author.get().setPassword(this.passwordEncoder.encode(payload.getNewPassword()));
         this.authorRepository.save(author.get());
@@ -121,7 +121,7 @@ public class AuthServiceImpl implements AuthService {
             this.sendPasswordRestEmail(authorResponse);
         });
         passwordRestThread.start();
-        return new GQLResponse("Email send successfully.", ReduxUtil.SUCCESS);
+        return new GQLResponse<>("Email send successfully.", ReduxUtil.SUCCESS);
     }
 
     /**
@@ -152,7 +152,7 @@ public class AuthServiceImpl implements AuthService {
             emailMessageRequest.getBodyMap().put("author", authorResponse);
             logger.info(emailMessagesFactory.sendSimpleMail(emailMessageRequest));
         } catch (Exception ex) {
-            logger.error("Error while sending register email :- " + ExceptionUtil.getRootCauseMessage(ex));
+            logger.error("Error while sending register email :- {} ", ExceptionUtil.getRootCauseMessage(ex));
         }
     }
 
@@ -169,7 +169,7 @@ public class AuthServiceImpl implements AuthService {
             emailMessageRequest.getBodyMap().put("author", authorResponse);
             logger.info(emailMessagesFactory.sendSimpleMail(emailMessageRequest));
         } catch (Exception ex) {
-            logger.error("Error while sending register email :- " + ExceptionUtil.getRootCauseMessage(ex));
+            logger.error("Error while sending register email :- {} ", ExceptionUtil.getRootCauseMessage(ex));
         }
     }
 

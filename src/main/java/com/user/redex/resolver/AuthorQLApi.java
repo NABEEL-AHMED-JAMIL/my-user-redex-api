@@ -44,7 +44,7 @@ public class AuthorQLApi {
     @PreAuthorize("isAnonymous()")
     public GQLResponse<AuthorResponse> createAuthor(@Argument() AuthorRequest payload) {
         try {
-            return this.authorService.createEntity(payload);
+            return (GQLResponse<AuthorResponse>) this.authorService.createEntity(payload);
         } catch (Exception ex) {
             logger.error("An error occurred while createAuthor[AuthorResponse] ", ExceptionUtil.getRootCause(ex));
             return new GQLResponse(ExceptionUtil.getRootCauseMessage(ex), ReduxUtil.ERROR);
@@ -60,7 +60,7 @@ public class AuthorQLApi {
     @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     public GQLResponse<AuthorResponse> updateAuthor(@Argument() AuthorRequest payload) {
         try {
-            return this.authorService.updateEntity(payload);
+            return (GQLResponse<AuthorResponse>) this.authorService.updateEntity(payload);
         } catch (Exception ex) {
             logger.error("An error occurred while updateAuthor[AuthorResponse] ", ExceptionUtil.getRootCause(ex));
             return new GQLResponse(ExceptionUtil.getRootCauseMessage(ex), ReduxUtil.ERROR);
@@ -76,7 +76,7 @@ public class AuthorQLApi {
     @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     public GQLResponse<AuthorResponse> deleteAuthor(@Argument(value = "id") String id) {
         try {
-            return this.authorService.deleteEntity(id);
+            return (GQLResponse<AuthorResponse>) this.authorService.deleteEntity(id);
         } catch (Exception ex) {
             logger.error("An error occurred while deleteAuthor[AuthorResponse] ", ExceptionUtil.getRootCause(ex));
             return new GQLResponse(ExceptionUtil.getRootCauseMessage(ex), ReduxUtil.ERROR);
@@ -92,7 +92,7 @@ public class AuthorQLApi {
     @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     public GQLResponse<AuthorResponse> getAuthor(@Argument(value = "id") String id) {
         try {
-            return this.authorService.getEntity(id);
+            return (GQLResponse<AuthorResponse>) this.authorService.getEntity(id);
         } catch (Exception ex) {
             logger.error("An error occurred while getAuthor[AuthorResponse] ", ExceptionUtil.getRootCause(ex));
             return new GQLResponse(ExceptionUtil.getRootCauseMessage(ex), ReduxUtil.ERROR);

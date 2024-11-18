@@ -7,28 +7,28 @@ import com.user.redex.business.dto.response.GQLResponse;
  * R for Reqeust
  * T for Response
  */
-public interface EntityService<R, T> {
+public interface EntityService<R> {
 
     /**
      * Create  entity
      * @param payload
      * @return T
      */
-    GQLResponse<T> createEntity(R payload) throws Exception;
+    GQLResponse<?> createEntity(R payload) throws Exception;
 
     /**
      * Update entity
      * @param payload
      * @return T
      */
-    GQLResponse<T> updateEntity(R payload) throws Exception;
+    GQLResponse<?> updateEntity(R payload) throws Exception;
 
     /**
      * Delete entity
      * @param id
      * @return BasicEntity
      */
-    GQLResponse<T> deleteEntity(String id) throws Exception;
+    GQLResponse<?> deleteEntity(String id) throws Exception;
 
 
     /**
@@ -36,7 +36,7 @@ public interface EntityService<R, T> {
      * @param id
      * @return T
      */
-    GQLResponse<T> getEntity(String id) throws Exception;
+    GQLResponse<?> getEntity(String id) throws Exception;
 
 
     /**
