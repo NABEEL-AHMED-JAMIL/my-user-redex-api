@@ -40,33 +40,58 @@ public class RedexConfiguration extends WebSecurityConfigurerAdapter {
 
     public RedexConfiguration() {}
 
+    /**
+     * Method use to get the auth token filter
+     * @return AuthTokenFilter
+     * */
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
         return new AuthTokenFilter();
     }
 
+    /**
+     * Method use to get authentication manger
+     * @return AuthenticationManager
+     * */
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
 
+    /**
+     * Method use to get object of password encoder
+     * @return PasswordEncoder
+     * */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * Method use to configure authentication manger builder
+     * @param authenticationManagerBuilder
+     * */
     @Override
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder.userDetailsService(this.userDetailsService).passwordEncoder(passwordEncoder());
     }
 
+    /**
+     * Method use to configure the http
+     * @param http
+     * */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable().exceptionHandling().authenticationEntryPoint(this.unauthorizedHandler).and()
+        http.cors().and().csrf().disable()
+            .exceptionHandling().authenticationEntryPoint(this.unauthorizedHandler).and()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-            .authorizeRequests().anyRequest().permitAll();
+            .authorizeRequests()
+            .antMatchers("/auth/**").permitAll()
+            .antMatchers("/api/v2/graphql").authenticated()
+            .anyRequest().authenticated();
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }
+
 
 }

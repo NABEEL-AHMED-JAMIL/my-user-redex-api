@@ -12,7 +12,7 @@ import com.user.redex.business.repository.AuthorRepository;
 import com.user.redex.business.service.AuthorService;
 import com.user.redex.manager.emailer.EmailMessageRequest;
 import com.user.redex.manager.emailer.EmailMessagesFactory;
-import com.user.redex.manager.remote.RemoteFileExchange;
+import com.user.redex.manager.remote.EfsFileExchange;
 import com.user.redex.manager.velocity.TemplateType;
 import com.user.redex.util.ExceptionUtil;
 import com.user.redex.util.ReduxUtil;
@@ -21,7 +21,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -44,7 +43,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Autowired
     private AuthorRepository authorRepository;
     @Autowired
-    private RemoteFileExchange remoteFileExchange;
+    private EfsFileExchange efsFileExchange;
     @Autowired
     private EmailMessagesFactory emailMessagesFactory;
 
@@ -61,24 +60,10 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public GQLResponse<AuthorResponse> createEntity(AuthorRequest payload) throws Exception {
         logger.info("Request For New Author :- " + payload);
-        if (ReduxUtil.isNull(payload.getFirstName())) {
-            return new GQLResponse<>("Author firstName required.", ReduxUtil.ERROR);
-        } else if (ReduxUtil.isNull(payload.getLastName())) {
-            return new GQLResponse<>("Author lastName required.", ReduxUtil.ERROR);
-        } else if (ReduxUtil.isNull(payload.getEmail())) {
+        if (ReduxUtil.isNull(payload.getEmail())) {
             return new GQLResponse<>("Author email required.", ReduxUtil.ERROR);
         } else if (ReduxUtil.isNull(payload.getUsername())) {
             return new GQLResponse<>("Author username required.", ReduxUtil.ERROR);
-        } else if (ReduxUtil.isNull(payload.getPassword())) {
-            return new GQLResponse<>("Author password required.", ReduxUtil.ERROR);
-        } else if (ReduxUtil.isNull(payload.getBiography())) {
-            return new GQLResponse<>("Author biography required.", ReduxUtil.ERROR);
-        } else if (ReduxUtil.isNull(payload.getNationality())) {
-            return new GQLResponse<>("Author nationality required.", ReduxUtil.ERROR);
-        } else if (ReduxUtil.isNull(payload.getExpertise())) {
-            return new GQLResponse<>("Author expertise required.", ReduxUtil.ERROR);
-        } else if (ReduxUtil.isNull(payload.getRole())) {
-            return new GQLResponse<>("Author role required.", ReduxUtil.ERROR);
         }
         // db check author email and username
         if (this.authorRepository.findByEmail(payload.getEmail()).isPresent()) {
@@ -116,23 +101,7 @@ public class AuthorServiceImpl implements AuthorService {
         if (!author.isPresent()) {
             return new GQLResponse<>("Author not found.", ReduxUtil.ERROR);
         }
-        if (ReduxUtil.isNull(payload.getFirstName())) {
-            return new GQLResponse<>("Author firstName required.", ReduxUtil.ERROR);
-        } else if (ReduxUtil.isNull(payload.getLastName())) {
-            return new GQLResponse<>("Author lastName required.", ReduxUtil.ERROR);
-        } else if (ReduxUtil.isNull(payload.getBiography())) {
-            return new GQLResponse<>("Author biography required.", ReduxUtil.ERROR);
-        } else if (ReduxUtil.isNull(payload.getNationality())) {
-            return new GQLResponse<>("Author nationality required.", ReduxUtil.ERROR);
-        } else if (ReduxUtil.isNull(payload.getExpertise())) {
-            return new GQLResponse<>("Author expertise required.", ReduxUtil.ERROR);
-        }
-        author.get().setFirstName(payload.getFirstName());
-        author.get().setLastName(payload.getLastName());
-        author.get().setBiography(payload.getBiography());
-        author.get().setNationality(payload.getNationality());
-        author.get().setExpertise(payload.getExpertise());
-        this.authorRepository.save(author.get());
+        this.authorRepository.save(this.authorConverter.convertToAuthor(payload, author.get()));
         AuthorResponse authorResponse = this.authorConverter.convertToAuthor(author.get());
         return new GQLResponse<>("Author update successfully.", ReduxUtil.SUCCESS, authorResponse);
     }
@@ -152,6 +121,12 @@ public class AuthorServiceImpl implements AuthorService {
             return new GQLResponse<>("Author not found.", ReduxUtil.ERROR);
         }
         author.get().setStatus(Status.DELETE);
+        author.get().getBooks().stream()
+           .filter(book -> book.getStatus().equals(Status.ACTIVE))
+           .map(book -> {
+                book.setStatus(Status.DELETE);
+                return book;
+           });
         this.authorRepository.save(author.get());
         return new GQLResponse<>("Author delete successfully.", ReduxUtil.SUCCESS);
     }
@@ -170,8 +145,7 @@ public class AuthorServiceImpl implements AuthorService {
         if (!author.isPresent()) {
             return new GQLResponse<>("Author not found.", ReduxUtil.ERROR);
         }
-        return new GQLResponse<>("Author fetch successfully.", ReduxUtil.SUCCESS,
-            this.getAuthorResponse(author.get()));
+        return new GQLResponse<>("Author fetch successfully.", ReduxUtil.SUCCESS, this.getAuthorResponse(author.get()));
     }
 
     /**
@@ -182,44 +156,12 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public GQLResponse<AuthorListResponse> getAllEntities() throws Exception {
         logger.info("Request For Get All Authors :- ");
-        List<AuthorResponse> authorResponses = this.authorRepository.findAllByStatusNot(Status.DELETE)
-            .stream()
-            .filter(author -> author.getStatus().equals(Status.ACTIVE))
-            .map(author -> this.getAuthorResponse(author)).collect(Collectors.toList());
-        return new GQLResponse<>("Authors fetch successfully.", ReduxUtil.SUCCESS,
-            new AuthorListResponse(authorResponses));
-    }
-
-    /**
-     * Method use to upload the author image
-     * @param file
-     * @param payload
-     * @return AuthorResponse
-     * */
-    @Override
-    public GQLResponse<AuthorResponse> uploadAuthorImage(MultipartFile file, AuthorRequest payload) throws Exception {
-        logger.info("Request For upload author image :- {}", payload);
-        if (ReduxUtil.isNull(payload.getEmail())) {
-            return new GQLResponse<>("Author email required.", ReduxUtil.ERROR);
-        }
-        Optional<Author> author = this.authorRepository.findByEmailAndStatusNot(payload.getEmail(), Status.DELETE);
-        if (!author.isPresent()) {
-            return new GQLResponse<>("Author email not found.", ReduxUtil.ERROR);
-        }
-        String originalFilename = file.getOriginalFilename();
-        String fileExtension = "";
-        int dotIndex = originalFilename.lastIndexOf('.');
-        if (dotIndex >= 0) {
-            fileExtension = originalFilename.substring(dotIndex);
-        }
-        Map<String, Object> uploadResponse = this.remoteFileExchange.uploadToBucket(ReduxUtil.BUCKET,
-            UUID.randomUUID().toString().concat(fileExtension), file.getInputStream(), true);
-        author.get().setImage((String) uploadResponse.get(this.remoteFileExchange.PUBLIC_FILE));
-        this.authorRepository.save(author.get());
-        AuthorResponse authorResponse = new AuthorResponse();
-        authorResponse.setEmail(author.get().getEmail());
-        authorResponse.setImage(author.get().getImage());
-        return new GQLResponse<>("Authors fetch successfully.", ReduxUtil.SUCCESS, authorResponse);
+        return new GQLResponse<>("Authors fetch successfully.", ReduxUtil.SUCCESS, new AuthorListResponse(
+            this.authorRepository.findAllByStatusNot(Status.DELETE)
+                .stream()
+                .filter(author -> author.getStatus().equals(Status.ACTIVE))
+                .map(author -> this.getAuthorResponse(author)).collect(Collectors.toList())
+            ));
     }
 
     /**

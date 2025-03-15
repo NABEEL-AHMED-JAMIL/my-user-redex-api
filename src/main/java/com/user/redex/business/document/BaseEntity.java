@@ -21,8 +21,7 @@ public class BaseEntity {
     private LocalDateTime updatedAt;
     private Status status;
 
-    public BaseEntity() {
-    }
+    public BaseEntity() { }
 
     public String getId() {
         return id;

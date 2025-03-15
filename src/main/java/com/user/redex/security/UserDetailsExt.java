@@ -27,8 +27,7 @@ public class UserDetailsExt implements UserDetails {
     private Role role; // for token payload
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsExt() {
-    }
+    public UserDetailsExt() {}
 
     /**
      * build method provide the auth user detail
@@ -143,5 +142,6 @@ public class UserDetailsExt implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 }
 

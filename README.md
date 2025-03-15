@@ -51,7 +51,6 @@ This project includes JWT-based authentication and authorization for secure acce
 ## Technology Stack
 
 This project uses the following technologies:
-- **Redux**: For state management.
 - **GraphQL**: For API queries and mutations.
 - **MongoDB**: As the database.
 - **JWT**: For authentication and authorization.

@@ -14,7 +14,7 @@ import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
 
 /**
  * Api use to perform crud operation
@@ -22,13 +22,15 @@ import org.springframework.web.bind.annotation.RestController;
  * Implements IEntityQLApi<BookRequest, BookResponse> not worked due to this statment
  * [GraphQL exposes a single endpoint URL for all queries and mutations]
  */
-@RestController
+@Controller
 public class BookQLApi {
 
     private Logger logger = LoggerFactory.getLogger(BookQLApi.class);
 
     @Autowired
     private BookService bookService;
+
+    public BookQLApi() { }
 
     /**
      * Method use to create the book for login author
@@ -39,7 +41,7 @@ public class BookQLApi {
     @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     public GQLResponse<BookResponse> createBook(@Argument() BookRequest payload) {
         try {
-            return this.bookService.createEntity(payload);
+            return (GQLResponse<BookResponse>) this.bookService.createEntity(payload);
         } catch (Exception ex) {
             logger.error("An error occurred while createBook[BookResponse] ", ExceptionUtil.getRootCause(ex));
             return new GQLResponse(ExceptionUtil.getRootCauseMessage(ex), ReduxUtil.ERROR);
@@ -55,7 +57,7 @@ public class BookQLApi {
     @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     public GQLResponse<BookResponse> updateBook(@Argument() BookRequest payload) {
         try {
-            return this.bookService.updateEntity(payload);
+            return (GQLResponse<BookResponse>) this.bookService.updateEntity(payload);
         } catch (Exception ex) {
             logger.error("An error occurred while updateBook[BookResponse] ", ExceptionUtil.getRootCause(ex));
             return new GQLResponse(ExceptionUtil.getRootCauseMessage(ex), ReduxUtil.ERROR);
@@ -71,7 +73,7 @@ public class BookQLApi {
     @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     public GQLResponse<BookResponse> deleteBook(@Argument(value = "id") String id) {
         try {
-            return this.bookService.deleteEntity(id);
+            return (GQLResponse<BookResponse>) this.bookService.deleteEntity(id);
         } catch (Exception ex) {
             logger.error("An error occurred while deleteBook[BookResponse] ", ExceptionUtil.getRootCause(ex));
             return new GQLResponse(ExceptionUtil.getRootCauseMessage(ex), ReduxUtil.ERROR);
@@ -87,7 +89,7 @@ public class BookQLApi {
     @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     public GQLResponse<BookResponse> getBook(@Argument(value = "id") String id) {
         try {
-            return this.bookService.getEntity(id);
+            return (GQLResponse<BookResponse>) this.bookService.getEntity(id);
         } catch (Exception ex) {
             logger.error("An error occurred while getBook[BookResponse] ", ExceptionUtil.getRootCause(ex));
             return new GQLResponse(ExceptionUtil.getRootCauseMessage(ex), ReduxUtil.ERROR);

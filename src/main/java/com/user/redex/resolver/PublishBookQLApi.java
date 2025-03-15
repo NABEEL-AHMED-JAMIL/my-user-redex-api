@@ -10,14 +10,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
 
 /**
  * Api use to perform crud operation
  * @author Nabeel Ahmed
  */
-@RestController
+@Controller
 public class PublishBookQLApi {
 
     private Logger logger = LoggerFactory.getLogger(PublishBookQLApi.class);
@@ -30,7 +29,6 @@ public class PublishBookQLApi {
      * QLResponse<List<BookResponse>>
      * */
     @QueryMapping
-    @PreAuthorize("isAnonymous()")
     public GQLResponse<BookListResponse> fetchPublicBooks() {
         try {
             return this.publishBookService.fetchPublicBooks();
@@ -45,7 +43,6 @@ public class PublishBookQLApi {
      * QLResponse<AuthorListResponse>
      * */
     @QueryMapping
-    @PreAuthorize("isAnonymous()")
     public GQLResponse<AuthorListResponse> fetchPublicAuthors() {
         try {
             return this.publishBookService.fetchPublicAuthors();

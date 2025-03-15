@@ -12,9 +12,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BookRepository extends EntityRepository<Book> {
 
-    Optional<Book> findByIsbn(String isbn);
+    public Optional<Book> findByIsbn(String isbn);
 
-    Optional<Book> findByIdAndStatusNot(String id, Status status);
+    public Optional<Book> findByIdAndStatusNot(String id, Status status);
 
-    List<Book> findAllByStatusNotAndCoverImgNotNullAndBookUrlNotNull(Status status);
+    public List<Book> findAllByStatusNot(Status status);
+
 }

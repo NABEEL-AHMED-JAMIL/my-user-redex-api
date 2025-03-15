@@ -40,8 +40,7 @@ public class BookServiceImpl implements BookService {
     @Autowired
     private AuthorRepository authorRepository;
 
-    public BookServiceImpl() {
-    }
+    public BookServiceImpl() {}
 
     /**
      * Method use to add the book
@@ -57,25 +56,6 @@ public class BookServiceImpl implements BookService {
         Optional<Author> author = this.authorRepository.findByUsernameAndStatus(userDetails.getUsername(), Status.ACTIVE);
         if (!author.isPresent()) {
             return new GQLResponse<>("Author not found.", ReduxUtil.ERROR);
-        }
-        if (ReduxUtil.isNull(payload.getIsbn())) {
-            return new GQLResponse<>("Book isbn required.", ReduxUtil.ERROR);
-        } else if (ReduxUtil.isNull(payload.getTitle())) {
-            return new GQLResponse<>("Book title required.", ReduxUtil.ERROR);
-        } else if (ReduxUtil.isNull(payload.getPrice())) {
-            return new GQLResponse<>("Book price required.", ReduxUtil.ERROR);
-        } else if (ReduxUtil.isNull(payload.getPublisher())) {
-            return new GQLResponse<>("Book publisher required.", ReduxUtil.ERROR);
-        } else if (ReduxUtil.isNull(payload.getLanguage())) {
-            return new GQLResponse<>("Book language required.", ReduxUtil.ERROR);
-        } else if (ReduxUtil.isNull(payload.getCategory())) {
-            return new GQLResponse<>("Book category required.", ReduxUtil.ERROR);
-        } else if (ReduxUtil.isNull(payload.getFormat())) {
-            return new GQLResponse<>("Book format required.", ReduxUtil.ERROR);
-        } else if (ReduxUtil.isNull(payload.getDescription())) {
-            return new GQLResponse<>("Book description required.", ReduxUtil.ERROR);
-        } else if (ReduxUtil.isNull(payload.getNote())) {
-            return new GQLResponse<>("Book note required.", ReduxUtil.ERROR);
         }
         // db check isbn exist or not
         if (this.bookRepository.findByIsbn(payload.getIsbn()).isPresent()) {
@@ -102,22 +82,6 @@ public class BookServiceImpl implements BookService {
         Optional<Book> book = this.bookRepository.findByIsbn(payload.getIsbn());
         if (!book.isPresent()) {
             return new GQLResponse<>("Book not found with isbn.", ReduxUtil.ERROR);
-        } else if (ReduxUtil.isNull(payload.getTitle())) {
-            return new GQLResponse<>("Book title required.", ReduxUtil.ERROR);
-        } else if (ReduxUtil.isNull(payload.getPrice())) {
-            return new GQLResponse<>("Book price required.", ReduxUtil.ERROR);
-        } else if (ReduxUtil.isNull(payload.getPublisher())) {
-            return new GQLResponse<>("Book publisher required.", ReduxUtil.ERROR);
-        } else if (ReduxUtil.isNull(payload.getLanguage())) {
-            return new GQLResponse<>("Book language required.", ReduxUtil.ERROR);
-        } else if (ReduxUtil.isNull(payload.getCategory())) {
-            return new GQLResponse<>("Book category required.", ReduxUtil.ERROR);
-        } else if (ReduxUtil.isNull(payload.getFormat())) {
-            return new GQLResponse<>("Book format required.", ReduxUtil.ERROR);
-        } else if (ReduxUtil.isNull(payload.getDescription())) {
-            return new GQLResponse<>("Book description required.", ReduxUtil.ERROR);
-        } else if (ReduxUtil.isNull(payload.getNote())) {
-            return new GQLResponse<>("Book note required.", ReduxUtil.ERROR);
         }
         // book save but not show to the public user until the cover image and book upload using reset api file upload
         this.bookConverter.convertToBook(payload, book.get());
@@ -171,7 +135,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public GQLResponse<BookListResponse> getAllEntities() throws Exception {
         logger.info("Request For Get All Books :- ");
-        List<BookResponse> bookResponses = this.bookRepository.findAllByStatusNotAndCoverImgNotNullAndBookUrlNotNull(Status.DELETE)
+        List<BookResponse> bookResponses = this.bookRepository.findAllByStatusNot(Status.DELETE)
             .stream().filter(author -> author.getStatus().equals(Status.ACTIVE))
             .map(book -> this.getBookResponse(book)).collect(Collectors.toList());
         return new GQLResponse<>("Books fetch successfully.", ReduxUtil.SUCCESS, new BookListResponse(bookResponses));

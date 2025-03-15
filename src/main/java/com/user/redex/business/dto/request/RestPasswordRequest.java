@@ -14,8 +14,7 @@ public class RestPasswordRequest {
     private String username;
     private String newPassword;
 
-    public RestPasswordRequest() {
-    }
+    public RestPasswordRequest() { }
 
     public String getUsername() {
         return username;

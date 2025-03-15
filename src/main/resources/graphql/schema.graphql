@@ -144,6 +144,7 @@ input BookRequest {
     title: String
     price: Float
     publisher: String
+    publication: LocalDate
     language: Language
     category: Category
     format: Format
@@ -166,22 +167,8 @@ input AuthorRequest {
     status: Status
 }
 
-input AuthRequest {
-    username: String!
-    password: String!
-}
-
-input RestPass {
-    username: String!
-    newPassword: String!
-}
-
 # Mutation API
 type Mutation {
-    # public api
-    getToken(payload: AuthRequest!): GQLResponse!
-    forgotPassword(username: String!): GQLResponse!
-    resetPassword(payload: RestPass!): GQLResponse!
     # register
     createAuthor(payload: AuthorRequest!): GQLResponse
     # secure api

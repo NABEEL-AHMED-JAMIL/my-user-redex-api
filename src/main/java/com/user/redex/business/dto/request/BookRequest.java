@@ -19,10 +19,13 @@ public class BookRequest extends BaseEntityRequest {
     private String title;
     private Double price;
     private String publisher;
+    private LocalDate publication;
     private Language language;
-    private Category Category;
+    private Category category;
     private Format format;
     private String description;
+    private String coverImg;
+    private String bookUrl;
     private String note;
 
     public BookRequest() {
@@ -60,6 +63,14 @@ public class BookRequest extends BaseEntityRequest {
         this.publisher = publisher;
     }
 
+    public LocalDate getPublication() {
+        return publication;
+    }
+
+    public void setPublication(LocalDate publication) {
+        this.publication = publication;
+    }
+
     public Language getLanguage() {
         return language;
     }
@@ -68,12 +79,12 @@ public class BookRequest extends BaseEntityRequest {
         this.language = language;
     }
 
-    public com.user.redex.business.enums.Category getCategory() {
-        return Category;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setCategory(com.user.redex.business.enums.Category category) {
-        Category = category;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public Format getFormat() {
@@ -90,6 +101,22 @@ public class BookRequest extends BaseEntityRequest {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getCoverImg() {
+        return coverImg;
+    }
+
+    public void setCoverImg(String coverImg) {
+        this.coverImg = coverImg;
+    }
+
+    public String getBookUrl() {
+        return bookUrl;
+    }
+
+    public void setBookUrl(String bookUrl) {
+        this.bookUrl = bookUrl;
     }
 
     public String getNote() {

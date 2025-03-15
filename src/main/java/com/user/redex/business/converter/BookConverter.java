@@ -25,15 +25,36 @@ public class BookConverter {
      * */
     public Book convertToBook(BookRequest bookRequest, Book book) {
         logger.info("convertToBook => bookRequest to book.");
-        book.setTitle(bookRequest.getTitle());
-        book.setIsbn(bookRequest.getIsbn());
-        book.setPrice(bookRequest.getPrice());
-        book.setPublisher(bookRequest.getPublisher());
-        book.setLanguage(bookRequest.getLanguage());
-        book.setCategory(bookRequest.getCategory());
-        book.setFormat(bookRequest.getFormat());
-        book.setDescription(bookRequest.getDescription());
-        book.setNote(bookRequest.getNote());
+        if (!ReduxUtil.isNull(bookRequest.getIsbn())) {
+            book.setIsbn(bookRequest.getIsbn());
+        }
+        if (!ReduxUtil.isNull(bookRequest.getTitle())) {
+            book.setTitle(bookRequest.getTitle());
+        }
+        if (!ReduxUtil.isNull(bookRequest.getPrice())) {
+            book.setPrice(bookRequest.getPrice());
+        }
+        if (!ReduxUtil.isNull(bookRequest.getPublisher())) {
+            book.setPublisher(bookRequest.getPublisher());
+        }
+        if (!ReduxUtil.isNull(bookRequest.getPublication())) {
+            book.setPublication(bookRequest.getPublication());
+        }
+        if (!ReduxUtil.isNull(bookRequest.getLanguage())) {
+            book.setLanguage(bookRequest.getLanguage());
+        }
+        if (!ReduxUtil.isNull(bookRequest.getCategory())) {
+            book.setCategory(bookRequest.getCategory());
+        }
+        if (!ReduxUtil.isNull(bookRequest.getFormat())) {
+            book.setFormat(bookRequest.getFormat());
+        }
+        if (!ReduxUtil.isNull(bookRequest.getDescription())) {
+            book.setDescription(bookRequest.getDescription());
+        }
+        if (!ReduxUtil.isNull(bookRequest.getNote())) {
+            book.setNote(bookRequest.getNote());
+        }
         return book;
     }
 

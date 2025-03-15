@@ -25,7 +25,7 @@ public class Book extends BaseEntity {
     @Indexed
     private Language language;
     @Indexed
-    private Category Category;
+    private Category category;
     @Indexed
     private Format format;
     private String description;
@@ -35,8 +35,7 @@ public class Book extends BaseEntity {
     @DBRef
     private Author author;
 
-    public Book() {
-    }
+    public Book() { }
 
     public String getIsbn() {
         return isbn;
@@ -87,11 +86,11 @@ public class Book extends BaseEntity {
     }
 
     public Category getCategory() {
-        return Category;
+        return category;
     }
 
     public void setCategory(Category category) {
-        Category = category;
+        this.category = category;
     }
 
     public Format getFormat() {

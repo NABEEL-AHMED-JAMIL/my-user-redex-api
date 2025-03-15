@@ -25,13 +25,27 @@ public class AuthorConverter {
      * */
     public Author convertToAuthor(AuthorRequest authorRequest, Author author) {
         logger.info("convertToAuthor => authorRequest to author.");
-        author.setFirstName(authorRequest.getFirstName());
-        author.setLastName(authorRequest.getLastName());
-        author.setEmail(authorRequest.getEmail());
-        author.setUsername(authorRequest.getUsername());
-        author.setBiography(authorRequest.getBiography());
-        author.setNationality(authorRequest.getNationality());
-        author.setExpertise(authorRequest.getExpertise());
+        if (!ReduxUtil.isNull(authorRequest.getFirstName())) {
+            author.setFirstName(authorRequest.getFirstName());
+        }
+        if (!ReduxUtil.isNull(authorRequest.getLastName())) {
+            author.setLastName(authorRequest.getLastName());
+        }
+        if (!ReduxUtil.isNull(authorRequest.getEmail())) {
+            author.setEmail(authorRequest.getEmail());
+        }
+        if (!ReduxUtil.isNull(authorRequest.getUsername())) {
+            author.setUsername(authorRequest.getUsername());
+        }
+        if (!ReduxUtil.isNull(authorRequest.getBiography())) {
+            author.setBiography(authorRequest.getBiography());
+        }
+        if (!ReduxUtil.isNull(authorRequest.getNationality())) {
+            author.setNationality(authorRequest.getNationality());
+        }
+        if (!ReduxUtil.isNull(authorRequest.getExpertise())) {
+            author.setExpertise(authorRequest.getExpertise());
+        }
         return author;
     }
 

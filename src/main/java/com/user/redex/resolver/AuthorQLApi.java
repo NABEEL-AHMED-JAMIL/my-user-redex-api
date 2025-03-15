@@ -1,8 +1,6 @@
 package com.user.redex.resolver;
 
-import com.google.gson.Gson;
 import com.user.redex.business.dto.request.AuthorRequest;
-import com.user.redex.business.dto.request.FileUploadRequest;
 import com.user.redex.business.dto.response.AuthorListResponse;
 import com.user.redex.business.dto.response.GQLResponse;
 import com.user.redex.business.dto.response.AuthorResponse;
@@ -16,9 +14,7 @@ import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
 
 /**
  * Api use to perform crud operation
@@ -27,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  * [GraphQL exposes a single endpoint URL for all queries and mutations]
  * @author Nabeel Ahmed
  */
-@RestController
+@Controller
 public class AuthorQLApi {
 
     private Logger logger = LoggerFactory.getLogger(AuthorQLApi.class);
@@ -35,13 +31,15 @@ public class AuthorQLApi {
     @Autowired
     private AuthorService authorService;
 
+    public AuthorQLApi() { }
+
     /**
      * QL method use to create the author
      * @param payload
      * return QLResponse<AuthorResponse>
      * */
     @MutationMapping
-    @PreAuthorize("isAnonymous()")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public GQLResponse<AuthorResponse> createAuthor(@Argument() AuthorRequest payload) {
         try {
             return (GQLResponse<AuthorResponse>) this.authorService.createEntity(payload);
@@ -110,31 +108,6 @@ public class AuthorQLApi {
             return (GQLResponse<AuthorListResponse>) this.authorService.getAllEntities();
         } catch (Exception ex) {
             logger.error("An error occurred while getAllAuthors[AuthorListResponse] ",
-                ExceptionUtil.getRootCause(ex));
-            return new GQLResponse(ExceptionUtil.getRootCauseMessage(ex), ReduxUtil.ERROR);
-        }
-    }
-
-    /**
-     * Rest-API for upload the file.
-     * QL not direct support to file upload for upload with ql you need to add extra dependency
-     * so avoid this and using rest api
-     * @param payload
-     * return QLResponse<AuthorListResponse>
-     * */
-    @RequestMapping(value = "/uploadAuthorImage", method = RequestMethod.POST)
-    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-    public GQLResponse<AuthorResponse> uploadAuthorImage(FileUploadRequest payload) {
-        try {
-            if (ReduxUtil.isNull(payload.getFile())) {
-                return new GQLResponse<>("Author file required.", ReduxUtil.ERROR);
-            } else if (ReduxUtil.isNull(payload.getData())) {
-                return new GQLResponse<>("Author payload required.", ReduxUtil.ERROR);
-            }
-            AuthorRequest authorRequest = new Gson().fromJson(payload.getData(), AuthorRequest.class);
-            return this.authorService.uploadAuthorImage(payload.getFile(), authorRequest);
-        } catch (Exception ex) {
-            logger.error("An error occurred while uploadAuthorImage[AuthorResponse] ",
                 ExceptionUtil.getRootCause(ex));
             return new GQLResponse(ExceptionUtil.getRootCauseMessage(ex), ReduxUtil.ERROR);
         }

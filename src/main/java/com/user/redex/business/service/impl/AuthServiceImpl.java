@@ -1,5 +1,7 @@
 package com.user.redex.business.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.user.redex.business.converter.AuthorConverter;
 import com.user.redex.business.document.Author;
 import com.user.redex.business.dto.response.AuthorResponse;
@@ -10,8 +12,6 @@ import com.user.redex.manager.emailer.EmailMessagesFactory;
 import com.user.redex.manager.velocity.TemplateType;
 import com.user.redex.util.ExceptionUtil;
 import com.user.redex.util.ReduxUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.user.redex.business.dto.request.AuthRequest;
 import com.user.redex.business.dto.request.RestPasswordRequest;
 import com.user.redex.business.dto.response.GQLResponse;
@@ -52,8 +52,7 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private EmailMessagesFactory emailMessagesFactory;
 
-    public AuthServiceImpl() {
-    }
+    public AuthServiceImpl() {}
 
     /**
      * Method use to generate the token
@@ -68,7 +67,7 @@ public class AuthServiceImpl implements AuthService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         // get the user detail from authentication
         UserDetailsExt userDetailsExt = (UserDetailsExt) authentication.getPrincipal();
-        TokenResponse tokenResponse = getTokenResponse(userDetailsExt);
+        TokenResponse tokenResponse = this.getTokenResponse(userDetailsExt);
         String token = this.jwtTokenUtil.generateTokenFromUsername(tokenResponse.getUsername());
         tokenResponse.setToken(token);
         return new GQLResponse<>("Author token fetch successfully.", ReduxUtil.SUCCESS, tokenResponse);
@@ -80,7 +79,7 @@ public class AuthServiceImpl implements AuthService {
      * @return GQLResponse<?>
      * */
     @Override
-    public GQLResponse<?> forgotPassword(String username) throws Exception {
+    public GQLResponse<AuthorResponse> forgotPassword(String username) throws Exception {
         logger.info("Request forgotPassword :- {}", username);
         if (ReduxUtil.isNull(username)) {
             return new GQLResponse<>("Username missing.", ReduxUtil.ERROR);
@@ -88,8 +87,7 @@ public class AuthServiceImpl implements AuthService {
         Optional<Author> author = this.authorRepository.findByUsernameAndStatus(username, Status.ACTIVE);
         if (author.isPresent()) {
             Thread registerForgotThread = new Thread(() -> {
-                AuthorResponse authorResponse = this.authorConverter.convertToAuthor(author.get());
-                this.sendForgotEmail(authorResponse);
+                this.sendForgotEmail(this.authorConverter.convertToAuthor(author.get()));
             });
             registerForgotThread.start();
             return new GQLResponse<>("Email send successfully.", ReduxUtil.SUCCESS);
@@ -117,8 +115,7 @@ public class AuthServiceImpl implements AuthService {
         author.get().setPassword(this.passwordEncoder.encode(payload.getNewPassword()));
         this.authorRepository.save(author.get());
         Thread passwordRestThread = new Thread(() -> {
-            AuthorResponse authorResponse = this.authorConverter.convertToAuthor(author.get());
-            this.sendPasswordRestEmail(authorResponse);
+            this.sendPasswordRestEmail(this.authorConverter.convertToAuthor(author.get()));
         });
         passwordRestThread.start();
         return new GQLResponse<>("Email send successfully.", ReduxUtil.SUCCESS);

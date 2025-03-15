@@ -28,8 +28,7 @@ public class Author extends BaseEntity {
     private String image;
     private List<Book> books;
 
-    public Author() {
-    }
+    public Author() { }
 
     public String getFirstName() {
         return firstName;
