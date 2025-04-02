@@ -93,5 +93,4 @@ public class RedexConfiguration extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
-
 }

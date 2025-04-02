@@ -2,6 +2,7 @@
 scalar LocalDate
 scalar LocalDateTime
 
+# Role
 enum Role {
     USER
     ADMIN
@@ -14,12 +15,14 @@ enum Format {
     EBOOK
 }
 
+# Enums
 enum Language {
     ENGLISH
     SPANISH
     ARABIC
 }
 
+# Enums
 enum Category {
     FICTION
     NO_FICTION
@@ -27,6 +30,7 @@ enum Category {
     SCIENCE_FICTION
 }
 
+# Enums
 enum Status {
     INACTIVE
     ACTIVE
@@ -186,12 +190,14 @@ type Query {
     getAllAuthors: GQLResponse
     getBook(id: ID!): GQLResponse
     getAllBooks: GQLResponse
-    # public GQL
-    fetchPublicBooks: GQLResponse
-    fetchPublicAuthors: GQLResponse
+    # search
+    getAllAuthoritySearch(search: String!): GQLResponse
+    getAllBookSearch(search: String!): GQLResponse
 }
 
 # Schema Entry Point
+# Under schema query have multiple method for select purpose
+# User schema mutation have multiple method for transaction (insert|update|delete)
 schema {
     query: Query
     mutation: Mutation

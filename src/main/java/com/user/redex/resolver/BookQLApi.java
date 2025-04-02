@@ -14,7 +14,8 @@ import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Api use to perform crud operation
@@ -22,7 +23,8 @@ import org.springframework.stereotype.Controller;
  * Implements IEntityQLApi<BookRequest, BookResponse> not worked due to this statment
  * [GraphQL exposes a single endpoint URL for all queries and mutations]
  */
-@Controller
+@RestController
+@CrossOrigin(origins = "http://localhost:4200")
 public class BookQLApi {
 
     private Logger logger = LoggerFactory.getLogger(BookQLApi.class);
@@ -107,6 +109,21 @@ public class BookQLApi {
             return (GQLResponse<BookListResponse>) this.bookService.getAllEntities();
         } catch (Exception ex) {
             logger.error("An error occurred while getAllBooks[BookListResponse] ", ExceptionUtil.getRootCause(ex));
+            return new GQLResponse(ExceptionUtil.getRootCauseMessage(ex), ReduxUtil.ERROR);
+        }
+    }
+
+    /**
+     * QL method use to fetch all the books by search
+     * return QLResponse<BookListResponse>
+     * */
+    @QueryMapping
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+    public GQLResponse<BookListResponse> getAllBookSearch(@Argument(value = "search") String search) {
+        try {
+            return (GQLResponse<BookListResponse>) this.bookService.getAllBookSearch(search);
+        } catch (Exception ex) {
+            logger.error("An error occurred while getAllBookSearch[BookListResponse] ", ExceptionUtil.getRootCause(ex));
             return new GQLResponse(ExceptionUtil.getRootCauseMessage(ex), ReduxUtil.ERROR);
         }
     }

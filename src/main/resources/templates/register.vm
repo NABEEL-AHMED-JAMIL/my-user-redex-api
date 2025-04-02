@@ -72,7 +72,7 @@
                 If you have any questions or need assistance, please do not hesitate to reach out to our support team.</p>
             <p>Best regards,</p>
             <p>The QL Team</p>
-            <a href="http://localhost:4200/login" class="button">Log In</a>
+            <a href="http://localhost:4200/auth/login" class="button">Log In</a>
         </div>
         <div class="footer">
             <p>&copy; 2024 [NABEEL-AHMED-JAMIL]. All rights open source.</p>

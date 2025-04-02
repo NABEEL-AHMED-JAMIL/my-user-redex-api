@@ -147,6 +147,8 @@ public class AuthServiceImpl implements AuthService {
             emailMessageRequest.setRecipients(authorResponse.getEmail());
             emailMessageRequest.setSubject("Password Reset Request");
             emailMessageRequest.getBodyMap().put("author", authorResponse);
+            emailMessageRequest.getBodyMap().put("token",
+                this.jwtTokenUtil.generateTokenFromUsername(authorResponse.getUsername()));
             logger.info(emailMessagesFactory.sendSimpleMail(emailMessageRequest));
         } catch (Exception ex) {
             logger.error("Error while sending register email :- {} ", ExceptionUtil.getRootCauseMessage(ex));

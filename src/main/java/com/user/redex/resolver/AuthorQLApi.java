@@ -14,7 +14,8 @@ import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Api use to perform crud operation
@@ -23,7 +24,8 @@ import org.springframework.stereotype.Controller;
  * [GraphQL exposes a single endpoint URL for all queries and mutations]
  * @author Nabeel Ahmed
  */
-@Controller
+@RestController
+@CrossOrigin(origins = "http://localhost:4200")
 public class AuthorQLApi {
 
     private Logger logger = LoggerFactory.getLogger(AuthorQLApi.class);
@@ -109,6 +111,21 @@ public class AuthorQLApi {
         } catch (Exception ex) {
             logger.error("An error occurred while getAllAuthors[AuthorListResponse] ",
                 ExceptionUtil.getRootCause(ex));
+            return new GQLResponse(ExceptionUtil.getRootCauseMessage(ex), ReduxUtil.ERROR);
+        }
+    }
+
+    /**
+     * QL method use to fetch all the authors by search
+     * return QLResponse<AuthorListResponse>
+     * */
+    @QueryMapping
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+    public GQLResponse<AuthorListResponse> getAllAuthoritySearch(@Argument(value = "search") String search) {
+        try {
+            return (GQLResponse<AuthorListResponse>) this.authorService.getAllAuthoritySearch(search);
+        } catch (Exception ex) {
+            logger.error("An error occurred while getAllAuthoritySearch[AuthorListResponse] ", ExceptionUtil.getRootCause(ex));
             return new GQLResponse(ExceptionUtil.getRootCauseMessage(ex), ReduxUtil.ERROR);
         }
     }

@@ -5,6 +5,7 @@ import com.user.redex.business.enums.Format;
 import com.user.redex.business.enums.Language;
 import com.user.redex.business.enums.Category;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDate;
@@ -17,8 +18,10 @@ public class Book extends BaseEntity {
 
     @Indexed(unique = true)
     private String isbn;
+    @TextIndexed
     private String title;
     private Double price;
+    @TextIndexed
     private String publisher;
     @Indexed
     private LocalDate publication;

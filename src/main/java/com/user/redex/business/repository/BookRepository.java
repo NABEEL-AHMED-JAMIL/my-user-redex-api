@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import com.user.redex.business.document.Book;
 import com.user.redex.business.enums.Status;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -17,5 +18,8 @@ public interface BookRepository extends EntityRepository<Book> {
     public Optional<Book> findByIdAndStatusNot(String id, Status status);
 
     public List<Book> findAllByStatusNot(Status status);
+
+    @Query("{'$text': {'$search': ?0}}")
+    public List<Book> searchByText(String search);
 
 }

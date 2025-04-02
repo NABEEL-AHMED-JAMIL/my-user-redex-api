@@ -6,6 +6,30 @@ server:
   servlet:
       context-path: /api/v2
 #==============================
+# ==== Actuator Config=========
+#==============================
+management:
+  endpoints:
+    jmx:
+      exposure:
+        include: "*"
+    web:
+      exposure:
+        include: prometheus,metrics,health
+  endpoint:
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  metrics:
+    enable:
+      jvm: true
+    export:
+      prometheus:
+        enabled: true
+    tags:
+      application: my-user-redux-api
+#==============================
 # ==== Database detail ========
 # =============================
 spring:

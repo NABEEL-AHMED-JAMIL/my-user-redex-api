@@ -186,12 +186,14 @@ type Query {
     getAllAuthors: GQLResponse
     getBook(id: ID!): GQLResponse
     getAllBooks: GQLResponse
-    # public GQL
-    fetchPublicBooks: GQLResponse
-    fetchPublicAuthors: GQLResponse
+    # search
+    getAllAuthoritySearch(search: String!): GQLResponse
+    getAllBookSearch(search: String!): GQLResponse
 }
 
 # Schema Entry Point
+# Under schema query have multiple method for select purpose
+# User schema mutation have multiple method for transaction (insert|update|delete)
 schema {
     query: Query
     mutation: Mutation

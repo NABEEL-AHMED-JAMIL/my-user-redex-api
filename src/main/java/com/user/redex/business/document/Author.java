@@ -2,9 +2,9 @@ package com.user.redex.business.document;
 
 import com.google.gson.Gson;
 import java.util.List;
-
 import com.user.redex.business.enums.Role;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
@@ -24,6 +24,7 @@ public class Author extends BaseEntity {
     private String biography;
     @Indexed
     private String nationality;
+    @TextIndexed
     private String expertise;
     private String image;
     private List<Book> books;

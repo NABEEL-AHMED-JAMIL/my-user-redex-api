@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -135,10 +134,30 @@ public class BookServiceImpl implements BookService {
     @Override
     public GQLResponse<BookListResponse> getAllEntities() throws Exception {
         logger.info("Request For Get All Books :- ");
-        List<BookResponse> bookResponses = this.bookRepository.findAllByStatusNot(Status.DELETE)
-            .stream().filter(author -> author.getStatus().equals(Status.ACTIVE))
-            .map(book -> this.getBookResponse(book)).collect(Collectors.toList());
-        return new GQLResponse<>("Books fetch successfully.", ReduxUtil.SUCCESS, new BookListResponse(bookResponses));
+        return new GQLResponse<>("Books fetch successfully.", ReduxUtil.SUCCESS,
+            new BookListResponse(this.bookRepository.findAllByStatusNot(Status.DELETE)
+                .stream()
+                .filter(author -> author.getStatus().equals(Status.ACTIVE))
+                .map(book -> this.getBookResponse(book)).collect(Collectors.toList())
+            ));
+    }
+
+    /**
+     * Method use to get all search
+     * @param search
+     * @return QLResponse<BookListResponse>
+     * @throws Exception
+     * */
+    @Override
+    public GQLResponse<BookListResponse> getAllBookSearch(String search) throws Exception {
+        logger.info("Request For Search :- {}", search);
+        return new GQLResponse<>("Books fetch successfully.", ReduxUtil.SUCCESS,
+            new BookListResponse(this.bookRepository.searchByText(search)
+                .stream()
+                .filter(author -> author.getStatus().equals(Status.ACTIVE))
+                .map(book -> this.getBookResponse(book))
+                .collect(Collectors.toList())
+            ));
     }
 
     /**

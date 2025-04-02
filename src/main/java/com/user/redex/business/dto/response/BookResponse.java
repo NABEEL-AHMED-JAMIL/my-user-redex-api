@@ -3,9 +3,6 @@ package com.user.redex.business.dto.response;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.gson.Gson;
-import com.user.redex.business.enums.Category;
-import com.user.redex.business.enums.Format;
-import com.user.redex.business.enums.Language;
 import java.time.LocalDate;
 
 /**

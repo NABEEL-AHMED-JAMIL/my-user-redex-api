@@ -121,12 +121,14 @@ public class AuthorServiceImpl implements AuthorService {
             return new GQLResponse<>("Author not found.", ReduxUtil.ERROR);
         }
         author.get().setStatus(Status.DELETE);
-        author.get().getBooks().stream()
-           .filter(book -> book.getStatus().equals(Status.ACTIVE))
-           .map(book -> {
-                book.setStatus(Status.DELETE);
-                return book;
-           });
+        if (!ReduxUtil.isNull(author.get().getBooks())) {
+            author.get().getBooks().stream()
+                .filter(book -> book.getStatus().equals(Status.ACTIVE))
+                .map(book -> {
+                    book.setStatus(Status.DELETE);
+                    return book;
+                });
+        }
         this.authorRepository.save(author.get());
         return new GQLResponse<>("Author delete successfully.", ReduxUtil.SUCCESS);
     }
@@ -156,8 +158,25 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public GQLResponse<AuthorListResponse> getAllEntities() throws Exception {
         logger.info("Request For Get All Authors :- ");
-        return new GQLResponse<>("Authors fetch successfully.", ReduxUtil.SUCCESS, new AuthorListResponse(
-            this.authorRepository.findAllByStatusNot(Status.DELETE)
+        return new GQLResponse<>("Authors fetch successfully.", ReduxUtil.SUCCESS,
+            new AuthorListResponse(this.authorRepository.findAllByStatusNot(Status.DELETE)
+                .stream()
+                .filter(author -> author.getStatus().equals(Status.ACTIVE))
+                .map(author -> this.getAuthorResponse(author)).collect(Collectors.toList())
+            ));
+    }
+
+    /**
+     * Method use to get all search
+     * @param search
+     * @return QLResponse<AuthorListResponse>
+     * @throws Exception
+     * */
+    @Override
+    public GQLResponse<AuthorListResponse> getAllAuthoritySearch(String search) throws Exception {
+        logger.info("Request For Search :- {}", search);
+        return new GQLResponse<>("Authors fetch successfully.", ReduxUtil.SUCCESS,
+            new AuthorListResponse(this.authorRepository.searchByText(search)
                 .stream()
                 .filter(author -> author.getStatus().equals(Status.ACTIVE))
                 .map(author -> this.getAuthorResponse(author)).collect(Collectors.toList())

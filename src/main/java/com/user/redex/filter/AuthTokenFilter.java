@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.util.ContentCachingRequestWrapper;
+
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -43,6 +45,8 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
         FilterChain filterChain) throws ServletException, IOException {
+        ContentCachingRequestWrapper wrappedRequest = new ContentCachingRequestWrapper(request);
+        logGraphQLRequest(wrappedRequest);
         try {
             String jwt = parseJwt(request);
             if (jwt != null && this.jwtTokenUtil.validateJwtToken(jwt)) {
@@ -56,7 +60,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         } catch (Exception ex) {
             logger.error("Cannot set user authentication: {}.", ex);
         }
-        filterChain.doFilter(request, response);
+        filterChain.doFilter(wrappedRequest, response);
     }
 
     /**
@@ -70,6 +74,19 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             return headerAuth.substring(7, headerAuth.length());
         }
         return null;
+    }
+
+    /**
+     * Logs GraphQL request body if it's a GraphQL request.
+     */
+    private void logGraphQLRequest(ContentCachingRequestWrapper request) {
+        if ("POST".equalsIgnoreCase(request.getMethod()) && request.getRequestURI().contains("/graphql")) {
+            byte[] buf = request.getContentAsByteArray();
+            if (buf.length > 0) {
+                String requestBody = new String(buf);
+                logger.info("GraphQL Request: {}", requestBody);
+            }
+        }
     }
 
 }
